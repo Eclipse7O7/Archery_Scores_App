@@ -1,0 +1,67 @@
+{
+   "archers": [
+      {
+         "name": "Forename Surname",
+         "overall_handicap": 57,
+         "scores": [
+            {
+               "bow_type": "Recurve",
+               "handicap": 55,
+               "score": 501
+            },
+            {
+               "bow_type": "Horsebow",
+               "handicap": 72,
+               "score": 390
+            },
+            {
+               "bow_type": "Recurve",
+               "handicap": 64,
+               "score": 442
+            },
+            {
+               "bow_type": "Recurve",
+               "handicap": 53,
+               "score": 507
+            }
+         ]
+      },
+      {
+         "name": "Forename Surname",
+         "overall_handicap": 64,
+         "scores": [
+            {
+               "bow_type": "Barebow",
+               "handicap": 66,
+               "score": 439
+            },
+            {
+               "bow_type": "Barebow",
+               "handicap": 67,
+               "score": 430
+            },
+            {
+               "bow_type": "Barebow",
+               "handicap": 59,
+               "score": 482
+            }
+         ]
+      },
+      {
+         "name": "Forename Surname",
+         "overall_handicap": 58,
+         "scores": [
+            {
+               "bow_type": "Compound",
+               "handicap": 44,
+               "score": 530
+            },
+            {
+               "bow_type": "Longbow",
+               "handicap": 72,
+               "score": 390
+            }
+         ]
+      }
+   ]
+}
