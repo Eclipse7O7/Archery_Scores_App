@@ -6,8 +6,16 @@ Created by Daniel Billings
 This is a small app I put together for the UEA Archery club, replacing the excel spreadsheet version the President initaially had me build 🥲
 Created using Visual Studio 2026 with v1.92.5 of Dear ImGui on a Windows Machine, specifically with the Win32 + DirectX12 ImGui base.
 
+Small note, because each name is essentially used as the archer's ID, duplicate names should be given an indentifier however you wish, e.g. "Jane Doe 1" and "Jane Doe 2"
+
+
 (If issues arise you want me to try and fix I guess try and reach me by commenting or something on this repo)
 
+# How to use
+Easiest way:
+Use one of the provided builds already, just take the folder for the build and put it wherever.
+
+Alternative way:
 If you create a Visual Studio solution and add all these files in, you should be able to build the latest version yourself as the project file is included.
 When you have the app executable, place it wherever on your device (Might require Windows, DirectX12 🤷)
 and place the necessary archerData_YY_YY.json (E.g. archerData_25_26.json) and the HandicapTables.csv all in a directory together, and it should work.
