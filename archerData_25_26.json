@@ -1,7 +1,7 @@
 {
    "archers": [
       {
-         "name": "Daniel Hebburn",
+         "name": "Forename Surname",
          "overall_handicap": 63,
          "scores": [
             {
@@ -17,7 +17,7 @@
          ]
       },
       {
-         "name": "Charlie Alcock",
+         "name": "Forename Surname",
          "overall_handicap": 64,
          "scores": [
             {
@@ -38,7 +38,7 @@
          ]
       },
       {
-         "name": "Trystan Rhoden",
+         "name": "Forename Surname",
          "overall_handicap": 57,
          "scores": [
             {
@@ -54,71 +54,78 @@
          ]
       },
       {
-         "name": "Daniel Billings",
+         "name": "Forename Surname",
          "overall_handicap": 0
       },
       {
-         "name": "Lola-Rose Gooch",
+         "name": "Forename Surname",
          "overall_handicap": 0
       },
       {
-         "name": "Daniel Cowell",
+         "name": "Forename Surname",
          "overall_handicap": 0
       },
       {
-         "name": "Adam Madejczyk",
+         "name": "Forename Surname",
          "overall_handicap": 0
       },
       {
-         "name": "Alex Roque Van Krieken Mota",
+         "name": "Forename Surname",
          "overall_handicap": 0
       },
       {
-         "name": "Imogen Flitter",
+         "name": "Forename Surname",
+         "overall_handicap": 42,
+         "scores": [
+            {
+               "bow_type": "Recurve",
+               "handicap": 42,
+               "score": 547
+            }
+         ]
+      },
+      {
+         "name": "Forename Surname",
          "overall_handicap": 0
       },
       {
-         "name": "Sienna Ritzen",
+         "name": "Forename Surname",
          "overall_handicap": 0
       },
       {
-         "name": "Yesmine Dahmani",
+         "name": "Forename Surname",
          "overall_handicap": 0
       },
       {
-         "name": "George Davies",
+         "name": "Forename Surname",
          "overall_handicap": 0
       },
       {
-         "name": "Deven Bahara",
+         "name": "Forename Surname",
          "overall_handicap": 0
       },
       {
-         "name": "Louis Gunstone",
+         "name": "Forename Surname",
          "overall_handicap": 0
       },
       {
-         "name": "Izzy Allison",
+         "name": "Forename Surname",
          "overall_handicap": 0
       },
       {
-         "name": "Lolwa Buarki",
+         "name": "Forename Surname",
          "overall_handicap": 0
       },
       {
-         "name": "Isaac Whatling-Page",
+         "name": "Forename Surname",
          "overall_handicap": 0
       },
       {
-         "name": "James Wilson",
+         "name": "Forename Surname",
          "overall_handicap": 0
       },
       {
-         "name": "Finlay Wallbanks",
-         "overall_handicap": 0
-      },
-      {
-         "name": "Kate Dew",
+         "name": "Forename Surname",
          "overall_handicap": 0
       }
    ]

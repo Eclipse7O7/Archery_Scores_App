@@ -1,7 +1,7 @@
 {
    "archers25_26": [
       {
-         "name": "Daniel Hebburn",
+         "name": "Forename Surname",
          "scores": [
             {"bow_type": "Recurve", "score": 501, "handicap": 55},
             {"bow_type": "Horsebow", "score": 390, "handicap": 72}
@@ -9,7 +9,7 @@
          "overall_handicap": 63
       },
       {
-         "name": "Charlie Alcock",
+         "name": "Forename Surname",
          "scores": [
             {"bow_type": "Barebow", "score": 439, "handicap": 66},
             {"bow_type": "Barebow", "score": 430, "handicap": 67},
@@ -19,7 +19,7 @@
          "overall_handicap": 64
       },
       {
-         "name": "Trystan Rhoden",
+         "name": "Forename Surname",
          "scores": [
             {"bow_type": "Compound", "score": 530, "handicap": 44},
             {"bow_type": "Longbow", "score": 390, "handicap": 72}

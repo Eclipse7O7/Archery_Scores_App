@@ -8,7 +8,7 @@ using json = nlohmann::json;
 
 int CalculateOverallHandicap(const Archer& archer)
 {
-    std::vector<int> handicaps;
+    std::vector<int> handicaps = {};
     for (const auto& s : archer.scores)
         handicaps.push_back(s.handicap);
 
