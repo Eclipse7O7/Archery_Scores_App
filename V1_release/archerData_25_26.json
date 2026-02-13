@@ -1,7 +1,7 @@
 {
    "archers": [
       {
-         "name": "Forename Surname",
+         "name": "Forename Surname1",
          "overall_handicap": 57,
          "scores": [
             {
@@ -27,7 +27,7 @@
          ]
       },
       {
-         "name": "Forename Surname",
+         "name": "Forename Surname2",
          "overall_handicap": 64,
          "scores": [
             {
@@ -48,7 +48,7 @@
          ]
       },
       {
-         "name": "Forename Surname",
+         "name": "Forename Surname3",
          "overall_handicap": 58,
          "scores": [
             {
