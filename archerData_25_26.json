@@ -1,0 +1,125 @@
+{
+   "archers": [
+      {
+         "name": "Daniel Hebburn",
+         "overall_handicap": 63,
+         "scores": [
+            {
+               "bow_type": "Recurve",
+               "handicap": 55,
+               "score": 501
+            },
+            {
+               "bow_type": "Horsebow",
+               "handicap": 72,
+               "score": 390
+            }
+         ]
+      },
+      {
+         "name": "Charlie Alcock",
+         "overall_handicap": 64,
+         "scores": [
+            {
+               "bow_type": "Barebow",
+               "handicap": 66,
+               "score": 439
+            },
+            {
+               "bow_type": "Barebow",
+               "handicap": 67,
+               "score": 430
+            },
+            {
+               "bow_type": "Barebow",
+               "handicap": 59,
+               "score": 482
+            }
+         ]
+      },
+      {
+         "name": "Trystan Rhoden",
+         "overall_handicap": 57,
+         "scores": [
+            {
+               "bow_type": "Compound",
+               "handicap": 44,
+               "score": 530
+            },
+            {
+               "bow_type": "Longbow",
+               "handicap": 71,
+               "score": 390
+            }
+         ]
+      },
+      {
+         "name": "Daniel Billings",
+         "overall_handicap": 0
+      },
+      {
+         "name": "Lola-Rose Gooch",
+         "overall_handicap": 0
+      },
+      {
+         "name": "Daniel Cowell",
+         "overall_handicap": 0
+      },
+      {
+         "name": "Adam Madejczyk",
+         "overall_handicap": 0
+      },
+      {
+         "name": "Alex Roque Van Krieken Mota",
+         "overall_handicap": 0
+      },
+      {
+         "name": "Imogen Flitter",
+         "overall_handicap": 0
+      },
+      {
+         "name": "Sienna Ritzen",
+         "overall_handicap": 0
+      },
+      {
+         "name": "Yesmine Dahmani",
+         "overall_handicap": 0
+      },
+      {
+         "name": "George Davies",
+         "overall_handicap": 0
+      },
+      {
+         "name": "Deven Bahara",
+         "overall_handicap": 0
+      },
+      {
+         "name": "Louis Gunstone",
+         "overall_handicap": 0
+      },
+      {
+         "name": "Izzy Allison",
+         "overall_handicap": 0
+      },
+      {
+         "name": "Lolwa Buarki",
+         "overall_handicap": 0
+      },
+      {
+         "name": "Isaac Whatling-Page",
+         "overall_handicap": 0
+      },
+      {
+         "name": "James Wilson",
+         "overall_handicap": 0
+      },
+      {
+         "name": "Finlay Wallbanks",
+         "overall_handicap": 0
+      },
+      {
+         "name": "Kate Dew",
+         "overall_handicap": 0
+      }
+   ]
+}
