@@ -267,7 +267,8 @@ void DrawMainUI(AppState& state)
     // Internal Comp Stuff
 
 
-    if (ImGui::CollapsingHeader("Competition Submit")) {
+    if (ImGui::CollapsingHeader("Competition Submit")) 
+    {
         
         ImGui::Text("Season: %s", state.currentSeason);
 
@@ -281,6 +282,28 @@ void DrawMainUI(AppState& state)
                 entry.name.c_str(),
                 entry.bowType.c_str(),
                 entry.score);
+
+
+            if (state.allowCompDeletion)
+            {
+                ImGui::SameLine();
+                ImGui::PushID(i);
+
+                if (ImGui::Button("Delete"))
+                {
+                    state.compIndexToDelete = i;
+                }
+
+                ImGui::PopID();
+            }
+        }
+
+        if (state.compIndexToDelete >= 0 &&
+            state.compIndexToDelete < state.competitionEntries.size())
+        {
+            state.competitionEntries.erase(state.competitionEntries.begin() + state.compIndexToDelete);
+
+            state.compIndexToDelete = -1;
         }
    
 
@@ -304,7 +327,7 @@ void DrawMainUI(AppState& state)
         static const char* bowTypes[] = {
         "Barebow",
         "Recurve",
-        "Compund",
+        "Compound",
         "Longbow",
         "Horsebow",
         "Warbow",
@@ -337,7 +360,9 @@ void DrawMainUI(AppState& state)
         ImGui::SetNextItemWidth(150);
         ImGui::InputInt("Score", &state.existingArcherScore);
 
-
+        if (!state.validationCompError.empty()) {
+            ImGui::TextColored(ImVec4(1, 0, 0, 1), "%s", state.validationCompError.c_str());
+        }
 
         
         ImGui::EndChild();
@@ -352,51 +377,98 @@ void DrawMainUI(AppState& state)
         
         if (ImGui::Button("Add Result"))
         {
-            // Check name isn't empty
-            if (state.existingArcherName[0] != '\0')
+
+            state.validationCompError.clear();
+           
+            if (state.existingArcherName[0] == '\0')
             {
-
-                // Check score is in valid range
-                if (state.existingArcherScore <= 600 && state.existingArcherScore >= 0) {
-
-                    // Using the CompEntry struct for better accessing / deleting 
-                    //  (No need to sort out removing the same index from every vector when all in one)
-
-                    AppState::CompEntry entry;
-                    entry.name = state.existingArcherName;
-                    entry.bowType = bowTypes[item_selected_idx];
-                    entry.score = state.existingArcherScore;
-
-                    state.competitionEntries.push_back(entry);
-
-                    // Reset inputs
-                    state.existingArcherName[0] = '\0';
-                    state.existingArcherScore = 0;
-                }
-                else {
-                    ImGui::TextColored(ImVec4(1, 0, 0, 1), "Score has to be in range 0-600");
-                }
+                state.validationCompError = "Name cannot be empty!";
             }
-            else {
-                ImGui::TextColored(ImVec4(1, 0, 0, 1), "Name cannot be empty!");
+            else if (state.existingArcherScore < 0 || state.existingArcherScore > 600)
+            {
+                state.validationCompError = "Score has to be in range 0-600";
             }
+            else
+            {
+                AppState::CompEntry entry;
+                entry.name = state.existingArcherName;
+                entry.bowType = bowTypes[item_selected_idx];
+                entry.score = state.existingArcherScore;
+
+                state.competitionEntries.push_back(entry);
+
+                state.existingArcherName[0] = '\0';
+                state.existingArcherScore = 0;
+            }
+
         }
+        
+        /* Moved to under inputs for visibilty
+        if (!state.validationCompError.empty()) {
+            ImGui::TextColored(ImVec4(1, 0, 0, 1), "%s", state.validationCompError.c_str());
+        }*/
 
 
         ImGui::Checkbox("Enable\n deletion", &state.allowCompDeletion);
 
 
-        // submit button
+        ImGui::Separator();
 
-        if (ImGui::Button("Submit Table"))
+
+        // submit button
+        ImGui::Text("Comp File Name \n(Without .json)");
+        ImGui::SetNextItemWidth(150);
+        ImGui::InputText("##CompFileName", state.compFileName, IM_ARRAYSIZE(state.compFileName));
+
+
+        if (ImGui::Button("Submit Comp"))
             {
                 // as it says on the tin
                 // check that all values are valid, including that the names exist, otherwise just
                 //  put an error message
+            for (AppState::CompEntry entry : state.competitionEntries)
+            {
+                // unnecessary score and bowtype check
+                /*
+                if (entry.score <= 600 && entry.score >= 0)
+                {
+                    if (entry.bowType == std::string("recurve") ||
+                        entry.bowType == std::string("compound") ||
+                        entry.bowType == std::string("barebow") ||
+                        entry.bowType == std::string("longbow") ||
+                        entry.bowType == std::string("horsebow") ||
+                        entry.bowType == std::string("warbow") ||
+                        entry.bowType == std::string("other"))
+                    {
+                        // archer for loop
+                    }
+                }
+                */
+                bool entryArcherFound = false;
+                for (Archer archer : state.archers) 
+                {
+                    if (entry.name == archer.name) 
+                    {
+                        entryArcherFound = true;
+                    }
+                }
 
-                // if valid then add scores to the respective names in the archers file
+                if (entryArcherFound) 
+                {
+                    // also check file name is fine
+                    if (state.compFileName != nullptr)
+                    {
+                        printf("Do I need a new file?");
+                        // if valid then add scores to the respective names in the archers file
+                        // also add the comp results to a json file to then be able to open in Comp Results window/ heading thingy 
+                    }
+                }
+                else 
+                {
+                    state.validationCompError = "Archer '" + entry.name + "' not found, either add archer or redo comp entry";
+                }
                 
-                // also add the comp results to a json file to then be able to open in Comp Results window/ heading thingy 
+
 
             }
 

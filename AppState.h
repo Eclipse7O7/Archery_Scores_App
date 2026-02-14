@@ -47,13 +47,15 @@ struct AppState
 
     std::vector<CompEntry> competitionEntries = {};
 
-
     char existingArcherName[64] = "";
-    //std::vector<std::string> competingArchersNames = {};
     int existingArcherScore = 0;
-    //std::vector<int> competingArchersScores = {};
     char existingArcherBowType[8] = "";
-    //std::vector<std::string> competingArchersBowTypes = {};
+
+    std::string validationCompError;
+
 
     bool allowCompDeletion = false;
+    int compIndexToDelete = -1;
+
+    char compFileName[128] = "";
 };
