@@ -58,7 +58,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int)
 
     HWND hwnd = CreateWindow(
         wc.lpszClassName, _T("UEA Archery Scores"),
-        WS_OVERLAPPEDWINDOW, 250, 100, 690, 550,
+        WS_OVERLAPPEDWINDOW, 250, 100, 725, 550,
         nullptr, nullptr, wc.hInstance, nullptr
     );
 

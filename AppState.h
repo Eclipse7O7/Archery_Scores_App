@@ -18,7 +18,7 @@ struct Archer
 
 struct AppState
 {
-    std::vector<Archer> archers;
+    std::vector<Archer> archers = {};
     int selectedArcher = -1;
 
     char searchBuffer[128] = "";
@@ -36,8 +36,24 @@ struct AppState
     bool showAddArcher = false;
 
 
-    // Internal Comp states
+    // Comp Submit states
+
+    struct CompEntry
+    {
+        std::string name;
+        std::string bowType;
+        int score;
+    };
+
+    std::vector<CompEntry> competitionEntries = {};
 
 
+    char existingArcherName[64] = "";
+    //std::vector<std::string> competingArchersNames = {};
+    int existingArcherScore = 0;
+    //std::vector<int> competingArchersScores = {};
+    char existingArcherBowType[8] = "";
+    //std::vector<std::string> competingArchersBowTypes = {};
 
+    bool allowCompDeletion = false;
 };

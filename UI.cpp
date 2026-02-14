@@ -76,7 +76,7 @@ void DrawMainUI(AppState& state)
 
         if (state.showAddArcher)
         {
-            ImGui::InputText("Archer Name", state.newArcherName,
+            ImGui::InputText("Club Archer Name", state.newArcherName,
                 IM_ARRAYSIZE(state.newArcherName));
 
             if (ImGui::Button("Confirm Add"))
@@ -257,18 +257,163 @@ void DrawMainUI(AppState& state)
         {
             ImGui::TextDisabled("Select an archer to view details.");
         }
-
-        ImGui::EndChild();
+               ImGui::EndChild();
     }
 
 
-    if (ImGui::CollapsingHeader("Internal Competition")) {
+
+
+
+    // Internal Comp Stuff
+
+
+    if (ImGui::CollapsingHeader("Competition Submit")) {
         
         ImGui::Text("Season: %s", state.currentSeason);
 
-        ImGui::BeginChild("ArcherList", ImVec2(250, 0), ImGuiChildFlags_Borders);
+        ImGui::BeginChild("ArcherListComp", ImVec2(290, 0), ImGuiChildFlags_Borders);
+
+        for (int i = 0; i < state.competitionEntries.size(); i++)
+        {
+            const auto& entry = state.competitionEntries[i];
+            
+            ImGui::Text("%s - (%s)  Score: %d",
+                entry.name.c_str(),
+                entry.bowType.c_str(),
+                entry.score);
+        }
+   
+
 
         ImGui::EndChild();
+
+
+        ImGui::SameLine();
+
+        ImGui::BeginChild("InputsList", ImVec2(250, 0), ImGuiChildFlags_Borders);
+
+
+        ImGui::SetNextItemWidth(150);
+        ImGui::InputText("Archer Name", state.existingArcherName,
+            IM_ARRAYSIZE(state.existingArcherName));
+
+
+        ImGuiWindowFlags dropdownFlags = ImGuiComboFlags_HeightSmall;//ImGuiComboFlags_HeightRegular
+        static int item_selected_idx = 0;
+
+        static const char* bowTypes[] = {
+        "Barebow",
+        "Recurve",
+        "Compund",
+        "Longbow",
+        "Horsebow",
+        "Warbow",
+        "Other"
+        };
+
+
+
+        const char* combo_preview_value = bowTypes[item_selected_idx];
+        ImGui::SetNextItemWidth(150);
+        if (ImGui::BeginCombo("Bow Type", combo_preview_value, dropdownFlags))
+        {
+            for (int n = 0; n < IM_ARRAYSIZE(bowTypes); n++)
+            {
+                const bool is_selected = (item_selected_idx == n);
+                if (ImGui::Selectable(bowTypes[n], is_selected))
+                {
+                    item_selected_idx = n;
+
+                    strncpy_s(state.existingArcherBowType, bowTypes[item_selected_idx], sizeof(state.existingArcherBowType) - 1);
+                    state.existingArcherBowType[sizeof(state.existingArcherBowType) - 1] = '\0';
+                }
+                // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+                if (is_selected)
+                    ImGui::SetItemDefaultFocus();
+            }
+            ImGui::EndCombo();
+        }
+
+        ImGui::SetNextItemWidth(150);
+        ImGui::InputInt("Score", &state.existingArcherScore);
+
+
+
+        
+        ImGui::EndChild();
+
+
+        ImGui::SameLine();
+
+
+
+        ImGui::BeginChild("Buttons");
+
+        
+        if (ImGui::Button("Add Result"))
+        {
+            // Check name isn't empty
+            if (state.existingArcherName[0] != '\0')
+            {
+
+                // Check score is in valid range
+                if (state.existingArcherScore <= 600 && state.existingArcherScore >= 0) {
+
+                    // Using the CompEntry struct for better accessing / deleting 
+                    //  (No need to sort out removing the same index from every vector when all in one)
+
+                    AppState::CompEntry entry;
+                    entry.name = state.existingArcherName;
+                    entry.bowType = bowTypes[item_selected_idx];
+                    entry.score = state.existingArcherScore;
+
+                    state.competitionEntries.push_back(entry);
+
+                    // Reset inputs
+                    state.existingArcherName[0] = '\0';
+                    state.existingArcherScore = 0;
+                }
+                else {
+                    ImGui::TextColored(ImVec4(1, 0, 0, 1), "Score has to be in range 0-600");
+                }
+            }
+            else {
+                ImGui::TextColored(ImVec4(1, 0, 0, 1), "Name cannot be empty!");
+            }
+        }
+
+
+        ImGui::Checkbox("Enable\n deletion", &state.allowCompDeletion);
+
+
+        // submit button
+
+        if (ImGui::Button("Submit Table"))
+            {
+                // as it says on the tin
+                // check that all values are valid, including that the names exist, otherwise just
+                //  put an error message
+
+                // if valid then add scores to the respective names in the archers file
+                
+                // also add the comp results to a json file to then be able to open in Comp Results window/ heading thingy 
+
+            }
+
+        ImGui::EndChild();
+
+     
+        /*
+        // Only show when delete is toggled
+
+        ImGui::BeginChild("DeleteButton");
+        if (ImGui::Button("Delete Button"))
+        {
+            // Delete
+        }
+
+        ImGui::EndChild();
+        */
     
     }
 
