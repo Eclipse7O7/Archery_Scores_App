@@ -69,6 +69,21 @@
                "score": 420
             }
          ]
+      },
+      {
+         "comp_name": "comp6",
+         "comp_results": [
+            {
+               "bow_type": "Barebow",
+               "name": "Forename Surname6",
+               "score": 555
+            },
+            {
+               "bow_type": "Barebow",
+               "name": "Forename Surname7",
+               "score": 506
+            }
+         ]
       }
    ]
 }

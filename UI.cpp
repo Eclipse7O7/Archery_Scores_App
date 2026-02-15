@@ -420,150 +420,127 @@ void DrawMainUI(AppState& state)
         ImGui::SetNextItemWidth(150);
         ImGui::InputText("##CompName", state.compName, IM_ARRAYSIZE(state.compName));
 
-
         if (ImGui::Button("Submit Comp"))
         {
             // as it says on the tin
             // check that all values are valid, including that the names exist, otherwise just
             //  put an error message
-		    
-            
-            // validate the comp name first, as if that is wrong then no point validating the rest of the data
-            
-			bool nameDupe = false;
-            for (AppState::Competition comp : state.comps)
+
+            state.validationCompError.clear();
+            state.validationError.clear();
+
+            bool nameDupe = false;
+            for (const auto& comp : state.comps)
             {
                 if (comp.name == state.compName)
                 {
                     nameDupe = true;
                     break;
                 }
-			}
+            }
 
-
-			if (state.compName[0] == '\0')
+            if (state.compName[0] == '\0')
             {
                 state.validationCompError = "Competition name cannot be empty!";
+                return;
             }
-            else if (nameDupe) {
-				state.validationCompError = "Competition name already exists, please choose a different name!";
+            if (nameDupe)
+            {
+                state.validationCompError = "Competition name already exists,\n please choose a different name!";
+                return;
             }
-            else if (state.competitionEntries.empty())
+            if (state.competitionEntries.empty())
             {
                 state.validationCompError = "No competition entries to submit!";
+                return;
             }
-            else
-			{
 
+			// Seperate validation loop for entries to ensure all errors are shown at once, and to avoid 
+            //  adding comps with invalid entries, or entries from invalid comps
 
-                // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-				// Still adds the competition even when there is an invalid entry, just with the error message, need to fix that
+            bool allValid = true;
 
+            for (const auto& entry : state.competitionEntries)
+            {
+                Archer* archerPtr = nullptr;
 
-				bool allValid = true;
-            
-
-                for (AppState::CompEntry entry : state.competitionEntries)
+                for (auto& archer : state.archers)
                 {
-
-
-                    bool entryArcherFound = false;
-                    //Archer archerFound;
-					Archer* archerPtr = nullptr;
-
-                    //for (Archer archer : state.archers)
-					for (Archer& archer : state.archers)
+                    if (archer.name == entry.name)
                     {
-                        if (entry.name == archer.name)
-                        {
-                            //entryArcherFound = true;
-                            //archerFound = archer;
-							archerPtr = &archer;
-                        }
+                        archerPtr = &archer;
+                        break;
                     }
+                }
 
-                    //if (entryArcherFound)
-					if (archerPtr != nullptr && state.validationCompError.empty())
+                if (archerPtr == nullptr)
+                {
+                    state.validationCompError =
+                        "Archer '" + entry.name + "' not found.";
+                    allValid = false;
+                    break;
+                }
+
+                int handicap = CalculateHandicapFromScore(entry.score, entry.bow_type);
+
+                if (handicap < 0)
+                {
+                    state.validationCompError =
+                        "Invalid score for archer '" + entry.name + "'";
+                    allValid = false;
+                    break;
+                }
+            }
+
+            // exit early if any invalid entries
+            if (!allValid)
+                return;
+
+
+            for (const auto& entry : state.competitionEntries)
+            {
+                for (auto& archer : state.archers)
+                {
+                    if (archer.name == entry.name)
                     {
-
-                        // if valid then add scores to the respective names in the archers file
-                        // also add the comp results to a json file to then be able to open in Comp Results window/ heading thingy 
-
-                        state.validationCompError.clear();
-
-
                         int handicap = CalculateHandicapFromScore(entry.score, entry.bow_type);
-
-                        if (handicap < 0)
-                        {
-                            state.validationError = "Score too low for handicap calculation.";
-                            return;
-                        }
 
                         ScoreEntry s;
                         s.bow_type = entry.bow_type;
                         s.score = entry.score;
                         s.handicap = handicap;
 
-                        // Add the new score
-                        //archerFound.scores.push_back(s);
-						archerPtr->scores.push_back(s);
-
-                        // Recalculate overall handicap from all scores
-                        // Using alias for readability
-                        //archerFound.overallHandicap = RecalcHandicap(archerFound);
-						archerPtr->overallHandicap = RecalcHandicap(*archerPtr);
-
-						if (state.validationError.empty())
-                        {
-                            SaveArchersToJson(
-                                ("archerData_" + state.currentSeason + ".json")
-                                , state
-                            );
-                        }
-
+                        archer.scores.push_back(s);
+                        archer.overallHandicap = RecalcHandicap(archer);
+                        break;
                     }
-                    else
-                    {
-                        state.validationCompError = "Archer '" + entry.name + "' not found, either add archer or redo comp entry";
-                        allValid = false;
-                    }
-
-
-                }
-
-                if (allValid) {
-                    
-                    /*
-                    LoadCompetitionsFromJson(
-                        ("competitionData_" + state.currentSeason + ".json")
-                        , state
-					);
-                    */
-                    
-                    AppState::Competition newComp;
-                    newComp.name = state.compName;
-                    newComp.comp_results = state.competitionEntries;
-                       
-                    state.comps.push_back(newComp);
-
-                    ImGui::TextColored(ImVec4(1, 0, 0, 1), "%d", state.comps.size());
-
-                    if (state.comps.size() < 2)
-                    {
-                        state.validationCompError = "Comps size too small";
-                    }
-
-                    SaveCompetitionsToJson(
-                        ("competitionData_" + state.currentSeason + ".json")
-                        , state
-					);
-                  
-                    state.competitionEntries.clear();
-                    state.compName[0] = '\0';
                 }
             }
+
+            // Save archers just the once when I know its fine
+            SaveArchersToJson(
+                "archerData_" + state.currentSeason + ".json",
+                state
+            );
+
+            // Add the competition
+            AppState::Competition newComp;
+            newComp.name = state.compName;
+            newComp.comp_results = state.competitionEntries;
+
+            state.comps.push_back(newComp);
+
+            SaveCompetitionsToJson(
+                "competitionData_" + state.currentSeason + ".json",
+                state
+            );
+
+            // Reset the UI
+            state.competitionEntries.clear();
+            state.compName[0] = '\0';
         }
+
+
         
         if (!state.validationCompError.empty())
         {
@@ -572,22 +549,24 @@ void DrawMainUI(AppState& state)
 
         ImGui::EndChild();
 
-
-        /*
-        // Only show when delete is toggled
-
-        ImGui::BeginChild("DeleteButton");
-        if (ImGui::Button("Delete Button"))
-        {
-            // Delete
-        }
-
-        ImGui::EndChild();
-        */
-
-        
-
     }
+
+
+    // Internal Comp Stuff
+
+
+    if (ImGui::CollapsingHeader("Competition Results"))
+    {
+
+        ImGui::Text("Season: %s", state.currentSeason);
+    }
+
+
+
+
+
+
+
     
     ImGui::End();
 
