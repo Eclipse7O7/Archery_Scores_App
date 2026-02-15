@@ -42,87 +42,93 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int)
     AppState appState;
     appState.currentSeason = "25_26";
 
-    try {
-    LoadFromJson(
-        "archerData_" + appState.currentSeason + ".json",
-        appState
-    );
-
-    LoadHandicapTable("HandicapTables.csv");
-
-
-    WNDCLASSEX wc = {
-        sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L,
-        GetModuleHandle(nullptr), LoadIcon(GetModuleHandle(nullptr), MAKEINTRESOURCE(IDI_ARCHERY_LOGO)), nullptr, nullptr, nullptr,
-        _T("ImGui Example"), LoadIcon(GetModuleHandle(nullptr), MAKEINTRESOURCE(IDI_ARCHERY_LOGO))
-    };
-    RegisterClassEx(&wc);
-
-    HWND hwnd = CreateWindow(
-        wc.lpszClassName, _T("UEA Archery Scores"),
-        WS_OVERLAPPEDWINDOW, 250, 100, 750, 550,
-        nullptr, nullptr, wc.hInstance, nullptr
-    );
-
-    if (!CreateDeviceD3D(hwnd))
+    try 
     {
-        CleanupDeviceD3D();
-        UnregisterClass(wc.lpszClassName, wc.hInstance);
-        return 1;
-    }
+        LoadArchersFromJson(
+            "archerData_" + appState.currentSeason + ".json",
+            appState
+        );
+        LoadCompetitionsFromJson(
+            "competitionData_" + appState.currentSeason + ".json",
+            appState
+	    );
 
-    ShowWindow(hwnd, SW_SHOWDEFAULT);
-    UpdateWindow(hwnd);
+        LoadHandicapTable("HandicapTables.csv");
 
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
 
-    ImGui::StyleColorsDark();
+        WNDCLASSEX wc = {
+            sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L,
+            GetModuleHandle(nullptr), LoadIcon(GetModuleHandle(nullptr), MAKEINTRESOURCE(IDI_ARCHERY_LOGO)), nullptr, nullptr, nullptr,
+            _T("ImGui Example"), LoadIcon(GetModuleHandle(nullptr), MAKEINTRESOURCE(IDI_ARCHERY_LOGO))
+        };
+        RegisterClassEx(&wc);
 
-    ImGui_ImplWin32_Init(hwnd);
-    ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
+        HWND hwnd = CreateWindow(
+            wc.lpszClassName, _T("UEA Archery Scores"),
+            WS_OVERLAPPEDWINDOW, 250, 100, 750, 550,
+            nullptr, nullptr, wc.hInstance, nullptr
+        );
 
-    bool done = false;
-    while (!done)
-    {
-        MSG msg;
-        while (PeekMessage(&msg, nullptr, 0U, 0U, PM_REMOVE))
+        if (!CreateDeviceD3D(hwnd))
         {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-            if (msg.message == WM_QUIT)
-                done = true;
+            CleanupDeviceD3D();
+            UnregisterClass(wc.lpszClassName, wc.hInstance);
+            return 1;
         }
 
-        ImGui_ImplDX11_NewFrame();
-        ImGui_ImplWin32_NewFrame();
-        ImGui::NewFrame();
+        ShowWindow(hwnd, SW_SHOWDEFAULT);
+        UpdateWindow(hwnd);
 
-        // -------- YOUR UI GOES HERE --------
-        DrawMainUI(appState);
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
 
-        // ----------------------------------
+        ImGui::StyleColorsDark();
 
-        ImGui::Render();
-        const float clear_color[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
-        g_pd3dDeviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, nullptr);
-        g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, clear_color);
-        ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-        g_pSwapChain->Present(1, 0);
+        ImGui_ImplWin32_Init(hwnd);
+        ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
+
+        bool done = false;
+        while (!done)
+        {
+            MSG msg;
+            while (PeekMessage(&msg, nullptr, 0U, 0U, PM_REMOVE))
+            {
+                TranslateMessage(&msg);
+                DispatchMessage(&msg);
+                if (msg.message == WM_QUIT)
+                    done = true;
+            }
+
+            ImGui_ImplDX11_NewFrame();
+            ImGui_ImplWin32_NewFrame();
+            ImGui::NewFrame();
+
+            // -------- YOUR UI GOES HERE --------
+            DrawMainUI(appState);
+
+            // ----------------------------------
+
+            ImGui::Render();
+            const float clear_color[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
+            g_pd3dDeviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, nullptr);
+            g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, clear_color);
+            ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+            g_pSwapChain->Present(1, 0);
+        }
+
+        ImGui_ImplDX11_Shutdown();
+        ImGui_ImplWin32_Shutdown();
+        ImGui::DestroyContext();
+
+        CleanupDeviceD3D();
+        DestroyWindow(hwnd);
+        UnregisterClass(wc.lpszClassName, wc.hInstance);
+
+        return 0;
     }
-
-    ImGui_ImplDX11_Shutdown();
-    ImGui_ImplWin32_Shutdown();
-    ImGui::DestroyContext();
-
-    CleanupDeviceD3D();
-    DestroyWindow(hwnd);
-    UnregisterClass(wc.lpszClassName, wc.hInstance);
-
-    return 0;
-    }
-    catch (const std::exception& e) {
+    catch (const std::exception& e) 
+    {
         MessageBoxA(nullptr, e.what(), "Error", MB_ICONERROR | MB_OK);
         return 1;
     }

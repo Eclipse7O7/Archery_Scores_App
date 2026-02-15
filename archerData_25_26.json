@@ -150,37 +150,5 @@
             }
          ]
       }
-   ],
-   "competitions": [
-      {
-         "compName": "comp1",
-         "compResults" : [
-            {
-               "name": "Forename Surname9",
-               "bowType": "Recurve",
-               "score": "547"
-            }, 
-            {
-               "name": "Forename Surname1",
-               "bowType": "Recurve",
-               "score": "507"
-            }
-         ]
-      },
-      {
-         "compName": "comp2",
-         "compResults": [
-            {
-               "bowType": "Recurve",
-               "name": "Forename Surname20",
-               "score": 512
-            },
-            {
-               "bowType": "Warbow",
-               "name": "Forename Surname 4",
-               "score": 44
-            }
-         ]
-      }
    ]
 }

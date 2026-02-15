@@ -38,7 +38,7 @@ void DrawMainUI(AppState& state)
             state.archers.clear();
             state.selectedArcher = -1;
 
-            LoadFromJson(
+            LoadArchersFromJson(
                 "archerData_" + state.currentSeason + ".json",
                 state
             );
@@ -100,7 +100,7 @@ void DrawMainUI(AppState& state)
 
                     state.archers.push_back(newArcher);
 
-                    SaveToJson(
+                    SaveArchersToJson(
                         "archerData_" + state.currentSeason + ".json",
                         state
                     );
@@ -145,7 +145,7 @@ void DrawMainUI(AppState& state)
 
                 ImGui::BulletText(
                     "%s | Score: %d | Handicap: %d",
-                    s.bowType.c_str(), s.score, s.handicap
+                    s.bow_type.c_str(), s.score, s.handicap
                 );
 
                 if (state.allowScoreDeletion)
@@ -170,7 +170,7 @@ void DrawMainUI(AppState& state)
                 a.overallHandicap = RecalcHandicap(a);
 
                 // Save updated data to current season file
-                SaveToJson(
+                SaveArchersToJson(
                     "archerData_" + state.currentSeason + ".json",
                     state
                 );
@@ -227,7 +227,7 @@ void DrawMainUI(AppState& state)
                     }
 
                     ScoreEntry s;
-                    s.bowType = state.newBowType;
+                    s.bow_type = state.newBowType;
                     s.score = state.newScore;
                     s.handicap = handicap;
 
@@ -238,7 +238,7 @@ void DrawMainUI(AppState& state)
                     // Using alias for readability
                     a.overallHandicap = RecalcHandicap(a);
 
-                    SaveToJson(
+                    SaveArchersToJson(
                         ("archerData_" + state.currentSeason + ".json")
                         , state
                     );
@@ -280,7 +280,7 @@ void DrawMainUI(AppState& state)
 
             ImGui::Text("%s - (%s)  Score: %d",
                 entry.name.c_str(),
-                entry.bowType.c_str(),
+                entry.bow_type.c_str(),
                 entry.score);
 
 
@@ -392,7 +392,7 @@ void DrawMainUI(AppState& state)
             {
                 AppState::CompEntry entry;
                 entry.name = state.existingArcherName;
-                entry.bowType = bowTypes[item_selected_idx];
+                entry.bow_type = bowTypes[item_selected_idx];
                 entry.score = state.existingArcherScore;
 
                 state.competitionEntries.push_back(entry);
@@ -492,7 +492,7 @@ void DrawMainUI(AppState& state)
                         state.validationCompError.clear();
 
 
-                        int handicap = CalculateHandicapFromScore(entry.score, entry.bowType);
+                        int handicap = CalculateHandicapFromScore(entry.score, entry.bow_type);
 
                         if (handicap < 0)
                         {
@@ -501,7 +501,7 @@ void DrawMainUI(AppState& state)
                         }
 
                         ScoreEntry s;
-                        s.bowType = entry.bowType;
+                        s.bow_type = entry.bow_type;
                         s.score = entry.score;
                         s.handicap = handicap;
 
@@ -514,7 +514,7 @@ void DrawMainUI(AppState& state)
                         //archerFound.overallHandicap = RecalcHandicap(archerFound);
 						archerPtr->overallHandicap = RecalcHandicap(*archerPtr);
 
-                        SaveToJson(
+                        SaveArchersToJson(
                             ("archerData_" + state.currentSeason + ".json")
                             , state
                         );
@@ -536,8 +536,8 @@ void DrawMainUI(AppState& state)
                        
                     state.comps.push_back(newComp);
 
-                    SaveToJson(
-                        ("archerData_" + state.currentSeason + ".json")
+                    SaveCompetitionsToJson(
+                        ("competitionData_" + state.currentSeason + ".json")
                         , state
 					);
                   

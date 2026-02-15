@@ -1,0 +1,34 @@
+{
+   "competitions": [
+      {
+         "compName": "comp1",
+         "compResults" : [
+            {
+               "name": "Forename Surname9",
+               "bow_type": "Recurve",
+               "score": "547"
+            }, 
+            {
+               "name": "Forename Surname1",
+               "bow_type": "Recurve",
+               "score": "507"
+            }
+         ]
+      },
+      {
+         "compName": "comp2",
+         "compResults": [
+            {
+               "bow_type": "Recurve",
+               "name": "Forename Surname20",
+               "score": 512
+            },
+            {
+               "bow_type": "Warbow",
+               "name": "Forename Surname 4",
+               "score": 44
+            }
+         ]
+      }
+   ]
+}

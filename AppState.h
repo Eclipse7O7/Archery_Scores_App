@@ -4,7 +4,7 @@
 
 struct ScoreEntry
 {
-    std::string bowType = "";
+    std::string bow_type = "";
     int score = 0;
     int handicap = 0;
 };
@@ -41,7 +41,7 @@ struct AppState
     struct CompEntry
     {
         std::string name;
-        std::string bowType;
+        std::string bow_type;
         int score;
     };
 
