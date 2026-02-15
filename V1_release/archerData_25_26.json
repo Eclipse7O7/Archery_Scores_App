@@ -63,5 +63,22 @@
             }
          ]
       }
+   ], 
+   "competitions": [
+      {
+         "compName": "comp1",
+         "compResults" : [
+            {
+               "name": "Forename Surname1",
+               "bowType": "Recurve",
+               "score": "507"
+            }, 
+            {
+               "name": "Forename Surname3",
+               "bowType": "Recurve",
+               "score": "344"
+            }
+         ]
+      }
    ]
 }

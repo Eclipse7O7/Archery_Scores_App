@@ -2,7 +2,7 @@
    "archers": [
       {
          "name": "Forename Surname1",
-         "overall_handicap": 63,
+         "overall_handicap": 60,
          "scores": [
             {
                "bow_type": "Recurve",
@@ -13,6 +13,11 @@
                "bow_type": "Horsebow",
                "handicap": 72,
                "score": 390
+            },
+            {
+               "bow_type": "Recurve",
+               "handicap": 53,
+               "score": 507
             }
          ]
       },
@@ -126,7 +131,56 @@
       },
       {
          "name": "Forename Surname20",
-         "overall_handicap": 0
+         "overall_handicap": 47,
+         "scores": [
+            {
+               "bow_type": "Recurve",
+               "handicap": 37,
+               "score": 563
+            },
+            {
+               "bow_type": "Recurve",
+               "handicap": 52,
+               "score": 509
+            },
+            {
+               "bow_type": "Recurve",
+               "handicap": 52,
+               "score": 512
+            }
+         ]
+      }
+   ],
+   "competitions": [
+      {
+         "compName": "comp1",
+         "compResults" : [
+            {
+               "name": "Forename Surname9",
+               "bowType": "Recurve",
+               "score": "547"
+            }, 
+            {
+               "name": "Forename Surname1",
+               "bowType": "Recurve",
+               "score": "507"
+            }
+         ]
+      },
+      {
+         "compName": "comp2",
+         "compResults": [
+            {
+               "bowType": "Recurve",
+               "name": "Forename Surname20",
+               "score": 512
+            },
+            {
+               "bowType": "Warbow",
+               "name": "Forename Surname 4",
+               "score": 44
+            }
+         ]
       }
    ]
 }

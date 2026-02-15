@@ -23,39 +23,70 @@ int CalculateOverallHandicap(const Archer& archer)
     return (handicaps[0] + handicaps[1] + handicaps[2]) / 3;
 }
 
-bool LoadArchersFromJson(const std::string& path, AppState& state)
+bool LoadFromJson(const std::string& path, AppState& state)
 {
     std::ifstream file(path);
     if (!file.is_open())
         return false;
+    
+    try {
+        json j;
+        file >> j;
 
-    json j;
-    file >> j;
+        state.archers.clear();
+        if (j.contains("archers") && j["archers"].is_array()) {
+            for (auto& a : j["archers"])
+            {
+                Archer archer;
+                archer.name = a["name"];
 
-    state.archers.clear();
+                for (auto& s : a["scores"])
+                {
+                    ScoreEntry score;
+                    score.bowType = s["bow_type"];
+                    score.score = s["score"];
+                    score.handicap = s["handicap"];
+                    archer.scores.push_back(score);
+                }
 
-    for (auto& a : j["archers"])
-    {
-        Archer archer;
-        archer.name = a["name"];
+                archer.overallHandicap = CalculateOverallHandicap(archer);
+                state.archers.push_back(archer);
+            }
 
-        for (auto& s : a["scores"])
+        }
+ 
+    
+        state.comps.clear();
+
+        if (j.contains("competitions") && j["competitions"].is_array())
         {
-            ScoreEntry score;
-            score.bowType = s["bow_type"];
-            score.score = s["score"];
-            score.handicap = s["handicap"];
-            archer.scores.push_back(score);
+            for (auto& b : j["competitions"])
+            {
+                AppState::Competition comp;
+                comp.name = b["name"];
+
+                for (auto& e : b["compResults"])
+                {
+                    AppState::CompEntry entry;
+                    entry.name = e["name"];
+                    entry.bowType = e["bowType"];
+                    entry.score = e["score"];
+                    comp.compResults.push_back(entry);
+                }
+
+                state.comps.push_back(comp);
+            }
         }
 
-        archer.overallHandicap = CalculateOverallHandicap(archer);
-        state.archers.push_back(archer);
+    }
+    catch (const std::exception& e) {
+        return false;
     }
 
     return true;
 }
 
-void SaveArchersToJson(const std::string& path, const AppState& state)
+void SaveToJson(const std::string& path, const AppState& state)
 {
     json j;
     j["archers"] = json::array();
@@ -77,6 +108,30 @@ void SaveArchersToJson(const std::string& path, const AppState& state)
 
         j["archers"].push_back(a);
     }
+
+
+    j["competitions"] = json::array();
+
+    for (const AppState::Competition comp: state.comps) {
+
+        json b;
+        b["name"] = comp.name;
+      
+		b["compResults"] = json::array();
+
+        for (const AppState::CompEntry e : comp.compResults) {
+            b["compResults"].push_back({
+                {"name", e.name},
+                {"bowType", e.bowType},
+                {"score", e.score}
+                });
+        }
+
+        j["competitions"].push_back(b);
+ 
+    }
+
+
 
     std::ofstream file(path);
     file << j.dump(3);

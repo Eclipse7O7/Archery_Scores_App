@@ -14,7 +14,7 @@ void DrawMainUI(AppState& state)
 {
     ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse;
 
-    ImGui::Begin("UEA Archery Scores", __nullptr , flags);
+    ImGui::Begin("UEA Archery Scores", __nullptr, flags);
 
     if (ImGui::CollapsingHeader("Scores", ImGuiTreeNodeFlags_DefaultOpen))
     {
@@ -38,7 +38,7 @@ void DrawMainUI(AppState& state)
             state.archers.clear();
             state.selectedArcher = -1;
 
-            LoadArchersFromJson(
+            LoadFromJson(
                 "archerData_" + state.currentSeason + ".json",
                 state
             );
@@ -100,7 +100,7 @@ void DrawMainUI(AppState& state)
 
                     state.archers.push_back(newArcher);
 
-                    SaveArchersToJson(
+                    SaveToJson(
                         "archerData_" + state.currentSeason + ".json",
                         state
                     );
@@ -170,7 +170,7 @@ void DrawMainUI(AppState& state)
                 a.overallHandicap = RecalcHandicap(a);
 
                 // Save updated data to current season file
-                SaveArchersToJson(
+                SaveToJson(
                     "archerData_" + state.currentSeason + ".json",
                     state
                 );
@@ -238,7 +238,7 @@ void DrawMainUI(AppState& state)
                     // Using alias for readability
                     a.overallHandicap = RecalcHandicap(a);
 
-                    SaveArchersToJson(
+                    SaveToJson(
                         ("archerData_" + state.currentSeason + ".json")
                         , state
                     );
@@ -257,7 +257,7 @@ void DrawMainUI(AppState& state)
         {
             ImGui::TextDisabled("Select an archer to view details.");
         }
-               ImGui::EndChild();
+        ImGui::EndChild();
     }
 
 
@@ -267,9 +267,9 @@ void DrawMainUI(AppState& state)
     // Internal Comp Stuff
 
 
-    if (ImGui::CollapsingHeader("Competition Submit")) 
+    if (ImGui::CollapsingHeader("Competition Submit"))
     {
-        
+
         ImGui::Text("Season: %s", state.currentSeason);
 
         ImGui::BeginChild("ArcherListComp", ImVec2(290, 0), ImGuiChildFlags_Borders);
@@ -277,7 +277,7 @@ void DrawMainUI(AppState& state)
         for (int i = 0; i < state.competitionEntries.size(); i++)
         {
             const auto& entry = state.competitionEntries[i];
-            
+
             ImGui::Text("%s - (%s)  Score: %d",
                 entry.name.c_str(),
                 entry.bowType.c_str(),
@@ -305,7 +305,7 @@ void DrawMainUI(AppState& state)
 
             state.compIndexToDelete = -1;
         }
-   
+
 
 
         ImGui::EndChild();
@@ -364,7 +364,7 @@ void DrawMainUI(AppState& state)
             ImGui::TextColored(ImVec4(1, 0, 0, 1), "%s", state.validationCompError.c_str());
         }
 
-        
+
         ImGui::EndChild();
 
 
@@ -374,12 +374,12 @@ void DrawMainUI(AppState& state)
 
         ImGui::BeginChild("Buttons");
 
-        
+
         if (ImGui::Button("Add Result"))
         {
 
             state.validationCompError.clear();
-           
+
             if (state.existingArcherName[0] == '\0')
             {
                 state.validationCompError = "Name cannot be empty!";
@@ -402,7 +402,7 @@ void DrawMainUI(AppState& state)
             }
 
         }
-        
+
         /* Moved to under inputs for visibilty
         if (!state.validationCompError.empty()) {
             ImGui::TextColored(ImVec4(1, 0, 0, 1), "%s", state.validationCompError.c_str());
@@ -416,65 +416,145 @@ void DrawMainUI(AppState& state)
 
 
         // submit button
-        ImGui::Text("Comp File Name \n(Without .json)");
+        ImGui::Text("Comp Name");
         ImGui::SetNextItemWidth(150);
-        ImGui::InputText("##CompFileName", state.compFileName, IM_ARRAYSIZE(state.compFileName));
+        ImGui::InputText("##CompName", state.compName, IM_ARRAYSIZE(state.compName));
 
 
         if (ImGui::Button("Submit Comp"))
+        {
+            // as it says on the tin
+            // check that all values are valid, including that the names exist, otherwise just
+            //  put an error message
+		    
+            
+            // validate the comp name first, as if that is wrong then no point validating the rest of the data
+            
+			bool nameDupe = false;
+            for (AppState::Competition comp : state.comps)
             {
-                // as it says on the tin
-                // check that all values are valid, including that the names exist, otherwise just
-                //  put an error message
-            for (AppState::CompEntry entry : state.competitionEntries)
-            {
-                // unnecessary score and bowtype check
-                /*
-                if (entry.score <= 600 && entry.score >= 0)
+                if (comp.name == state.compName)
                 {
-                    if (entry.bowType == std::string("recurve") ||
-                        entry.bowType == std::string("compound") ||
-                        entry.bowType == std::string("barebow") ||
-                        entry.bowType == std::string("longbow") ||
-                        entry.bowType == std::string("horsebow") ||
-                        entry.bowType == std::string("warbow") ||
-                        entry.bowType == std::string("other"))
-                    {
-                        // archer for loop
-                    }
+                    nameDupe = true;
+                    break;
                 }
-                */
-                bool entryArcherFound = false;
-                for (Archer archer : state.archers) 
-                {
-                    if (entry.name == archer.name) 
-                    {
-                        entryArcherFound = true;
-                    }
-                }
+			}
 
-                if (entryArcherFound) 
+
+			if (state.compName[0] == '\0')
+            {
+                state.validationCompError = "Competition name cannot be empty!";
+            }
+            else if (nameDupe) {
+				state.validationCompError = "Competition name already exists, please choose a different name!";
+            }
+            else if (state.competitionEntries.empty())
+            {
+                state.validationCompError = "No competition entries to submit!";
+            }
+            else
+			{
+
+
+                // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+				// Still adds the competition even when there is an invalid entry, just with the error message, need to fix that
+
+
+				bool allValid = true;
+            
+
+                for (AppState::CompEntry entry : state.competitionEntries)
                 {
-                    // also check file name is fine
-                    if (state.compFileName != nullptr)
+
+
+                    bool entryArcherFound = false;
+                    //Archer archerFound;
+					Archer* archerPtr = nullptr;
+
+                    //for (Archer archer : state.archers)
+					for (Archer& archer : state.archers)
                     {
-                        printf("Do I need a new file?");
+                        if (entry.name == archer.name)
+                        {
+                            //entryArcherFound = true;
+                            //archerFound = archer;
+							archerPtr = &archer;
+                        }
+                    }
+
+                    //if (entryArcherFound)
+					if (archerPtr != nullptr)
+                    {
+
                         // if valid then add scores to the respective names in the archers file
                         // also add the comp results to a json file to then be able to open in Comp Results window/ heading thingy 
+
+                        state.validationCompError.clear();
+
+
+                        int handicap = CalculateHandicapFromScore(entry.score, entry.bowType);
+
+                        if (handicap < 0)
+                        {
+                            state.validationError = "Score too low for handicap calculation.";
+                            return;
+                        }
+
+                        ScoreEntry s;
+                        s.bowType = entry.bowType;
+                        s.score = entry.score;
+                        s.handicap = handicap;
+
+                        // Add the new score
+                        //archerFound.scores.push_back(s);
+						archerPtr->scores.push_back(s);
+
+                        // Recalculate overall handicap from all scores
+                        // Using alias for readability
+                        //archerFound.overallHandicap = RecalcHandicap(archerFound);
+						archerPtr->overallHandicap = RecalcHandicap(*archerPtr);
+
+                        SaveToJson(
+                            ("archerData_" + state.currentSeason + ".json")
+                            , state
+                        );
+
+
                     }
-                }
-                else 
-                {
-                    state.validationCompError = "Archer '" + entry.name + "' not found, either add archer or redo comp entry";
-                }
-                
+                    else
+                    {
+                        state.validationCompError = "Archer '" + entry.name + "' not found, either add archer or redo comp entry";
+                    }
 
 
+                }
+
+                if (allValid) {
+                    AppState::Competition newComp;
+                    newComp.name = state.compName;
+                    newComp.compResults = state.competitionEntries;
+                       
+                    state.comps.push_back(newComp);
+
+                    SaveToJson(
+                        ("archerData_" + state.currentSeason + ".json")
+                        , state
+					);
+                  
+                    state.competitionEntries.clear();
+                    state.compName[0] = '\0';
+                }
             }
+        }
+        
+        if (!state.validationError.empty())
+        {
+            ImGui::TextColored(ImVec4(1, 0, 0, 1), "%s", state.validationError.c_str());
+        }
 
         ImGui::EndChild();
 
-     
+
         /*
         // Only show when delete is toggled
 
@@ -486,10 +566,11 @@ void DrawMainUI(AppState& state)
 
         ImGui::EndChild();
         */
-    
+
+        
+
     }
-
-
+    
     ImGui::End();
 
     

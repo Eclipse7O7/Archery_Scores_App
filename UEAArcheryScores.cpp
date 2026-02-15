@@ -40,8 +40,10 @@ void CleanupRenderTarget();
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int)
 {
     AppState appState;
+    appState.currentSeason = "25_26";
 
-    LoadArchersFromJson(
+    try {
+    LoadFromJson(
         "archerData_" + appState.currentSeason + ".json",
         appState
     );
@@ -58,7 +60,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int)
 
     HWND hwnd = CreateWindow(
         wc.lpszClassName, _T("UEA Archery Scores"),
-        WS_OVERLAPPEDWINDOW, 250, 100, 725, 550,
+        WS_OVERLAPPEDWINDOW, 250, 100, 750, 550,
         nullptr, nullptr, wc.hInstance, nullptr
     );
 
@@ -119,6 +121,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int)
     UnregisterClass(wc.lpszClassName, wc.hInstance);
 
     return 0;
+    }
+    catch (const std::exception& e) {
+        MessageBoxA(nullptr, e.what(), "Error", MB_ICONERROR | MB_OK);
+        return 1;
+    }
 }
 
 bool CreateDeviceD3D(HWND hWnd)

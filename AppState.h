@@ -45,6 +45,16 @@ struct AppState
         int score;
     };
 
+    struct Competition
+    {
+        std::string name;
+        std::vector<CompEntry> compResults = {};
+    };
+
+    std::vector<Competition> comps = {};
+
+   
+    // This is for all the current entries in the submitting current comp
     std::vector<CompEntry> competitionEntries = {};
 
     char existingArcherName[64] = "";
@@ -57,5 +67,5 @@ struct AppState
     bool allowCompDeletion = false;
     int compIndexToDelete = -1;
 
-    char compFileName[128] = "";
+    char compName[128] = "";
 };
