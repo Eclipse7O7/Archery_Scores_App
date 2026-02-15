@@ -2,151 +2,204 @@
    "archers": [
       {
          "name": "Forename Surname1",
-         "overall_handicap": 60,
+         "overall_handicap": 52,
          "scores": [
             {
-               "bow_type": "Recurve",
-               "handicap": 55,
-               "score": 501
+               "bow_type": "Barebow",
+               "handicap": 62,
+               "score": 455
             },
             {
-               "bow_type": "Horsebow",
-               "handicap": 72,
-               "score": 390
+               "bow_type": "Barebow",
+               "handicap": 43,
+               "score": 544
+            },
+            {
+               "bow_type": "Barebow",
+               "handicap": 64,
+               "score": 444
             },
             {
                "bow_type": "Recurve",
-               "handicap": 53,
-               "score": 507
+               "handicap": 62,
+               "score": 455
+            },
+            {
+               "bow_type": "Recurve",
+               "handicap": 51,
+               "score": 515
             }
          ]
       },
       {
          "name": "Forename Surname2",
-         "overall_handicap": 64,
+         "overall_handicap": 54,
          "scores": [
+            {
+               "bow_type": "Recurve",
+               "handicap": 61,
+               "score": 466
+            },
+            {
+               "bow_type": "Recurve",
+               "handicap": 35,
+               "score": 566
+            },
+            {
+               "bow_type": "Barebow",
+               "handicap": 80,
+               "score": 304
+            },
             {
                "bow_type": "Barebow",
                "handicap": 66,
-               "score": 439
-            },
-            {
-               "bow_type": "Barebow",
-               "handicap": 67,
-               "score": 430
-            },
-            {
-               "bow_type": "Barebow",
-               "handicap": 59,
-               "score": 482
+               "score": 433
             }
          ]
       },
       {
          "name": "Forename Surname3",
-         "overall_handicap": 57,
+         "overall_handicap": 81,
          "scores": [
             {
                "bow_type": "Compound",
-               "handicap": 44,
-               "score": 530
+               "handicap": 114,
+               "score": 55
             },
             {
-               "bow_type": "Longbow",
-               "handicap": 71,
-               "score": 390
+               "bow_type": "Horsebow",
+               "handicap": 64,
+               "score": 443
+            },
+            {
+               "bow_type": "Barebow",
+               "handicap": 67,
+               "score": 420
             }
          ]
       },
       {
          "name": "Forename Surname4",
-         "overall_handicap": 0
+         "overall_handicap": 0,
+         "scores": []
       },
       {
          "name": "Forename Surname5",
-         "overall_handicap": 0
+         "overall_handicap": 85,
+         "scores": [
+            {
+               "bow_type": "Horsebow",
+               "handicap": 85,
+               "score": 255
+            }
+         ]
       },
       {
          "name": "Forename Surname6",
-         "overall_handicap": 0
+         "overall_handicap": 0,
+         "scores": [
+            {
+               "bow_type": "",
+               "handicap": 0,
+               "score": 0
+            }
+         ]
       },
       {
          "name": "Forename Surname7",
-         "overall_handicap": 0
+         "overall_handicap": 0,
+         "scores": [
+            {
+               "bow_type": "",
+               "handicap": 0,
+               "score": 0
+            }
+         ]
       },
       {
          "name": "Forename Surname8",
-         "overall_handicap": 0
+         "overall_handicap": 0,
+         "scores": []
       },
       {
          "name": "Forename Surname9",
-         "overall_handicap": 42,
+         "overall_handicap": 0,
          "scores": [
             {
-               "bow_type": "Recurve",
-               "handicap": 42,
-               "score": 547
+               "bow_type": "",
+               "handicap": 0,
+               "score": 0
             }
          ]
       },
       {
          "name": "Forename Surname10",
-         "overall_handicap": 0
+         "overall_handicap": 0,
+         "scores": []
       },
       {
          "name": "Forename Surname11",
-         "overall_handicap": 0
+         "overall_handicap": 0,
+         "scores": []
       },
       {
          "name": "Forename Surname12",
-         "overall_handicap": 0
+         "overall_handicap": 0,
+         "scores": []
       },
       {
          "name": "Forename Surname13",
-         "overall_handicap": 0
+         "overall_handicap": 0,
+         "scores": []
       },
       {
          "name": "Forename Surname14",
-         "overall_handicap": 0
+         "overall_handicap": 0,
+         "scores": []
       },
       {
          "name": "Forename Surname15",
-         "overall_handicap": 0
+         "overall_handicap": 0,
+         "scores": []
       },
       {
          "name": "Forename Surname16",
-         "overall_handicap": 0
+         "overall_handicap": 0,
+         "scores": []
       },
       {
          "name": "Forename Surname17",
-         "overall_handicap": 0
+         "overall_handicap": 0,
+         "scores": []
       },
       {
          "name": "Forename Surname18",
-         "overall_handicap": 0
+         "overall_handicap": 0,
+         "scores": []
       },
       {
          "name": "Forename Surname19",
-         "overall_handicap": 0
+         "overall_handicap": 0,
+         "scores": []
       },
       {
          "name": "Forename Surname20",
-         "overall_handicap": 47,
+         "overall_handicap": 0,
          "scores": [
             {
-               "bow_type": "Recurve",
-               "handicap": 37,
-               "score": 563
+               "bow_type": "",
+               "handicap": 0,
+               "score": 0
             },
             {
-               "bow_type": "Recurve",
-               "handicap": 52,
-               "score": 509
+               "bow_type": "",
+               "handicap": 0,
+               "score": 0
             },
             {
-               "bow_type": "Recurve",
-               "handicap": 52,
-               "score": 512
+               "bow_type": "",
+               "handicap": 0,
+               "score": 0
             }
          ]
       }

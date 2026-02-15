@@ -48,122 +48,6 @@ static void EnsureFileExists(const std::string& path)
     }
 }
 
-/*
-bool LoadFromJson(const std::string& path, AppState& state)
-{
-    std::ifstream file(path);
-    if (!file.is_open())
-        return false;
-    
-    try {
-        json j;
-        file >> j;
-
-        state.archers.clear();
-        if (j.contains("archers") && j["archers"].is_array()) {
-            for (auto& a : j["archers"])
-            {
-                Archer archer;
-                archer.name = a["name"];
-
-                for (auto& s : a["scores"])
-                {
-                    ScoreEntry score;
-                    score.bow_type = s["bow_type"];
-                    score.score = s["score"];
-                    score.handicap = s["handicap"];
-                    archer.scores.push_back(score);
-                }
-
-                archer.overallHandicap = CalculateOverallHandicap(archer);
-                state.archers.push_back(archer);
-            }
-
-        }
- 
-    
-        state.comps.clear();
-
-        if (j.contains("competitions") && j["competitions"].is_array())
-        {
-            for (auto& b : j["competitions"])
-            {
-                AppState::Competition comp;
-                comp.name = b["name"];
-
-                for (auto& e : b["compResults"])
-                {
-                    AppState::CompEntry entry;
-                    entry.name = e["name"];
-                    entry.bow_type = e["bow_type"];
-                    entry.score = e["score"];
-                    comp.compResults.push_back(entry);
-                }
-
-                state.comps.push_back(comp);
-            }
-        }
-
-    }
-    catch (const std::exception& e) {
-        return false;
-    }
-
-    return true;
-}
-
-void SaveToJson(const std::string& path, const AppState& state)
-{
-    json j;
-    j["archers"] = json::array();
-
-    for (const auto& archer : state.archers)
-    {
-        json a;
-        a["name"] = archer.name;
-        a["overall_handicap"] = archer.overallHandicap;
-
-        for (const auto& s : archer.scores)
-        {
-            a["scores"].push_back({
-                {"bow_type", s.bow_type},
-                {"score", s.score},
-                {"handicap", s.handicap}
-                });
-        }
-
-        j["archers"].push_back(a);
-    }
-
-
-    j["competitions"] = json::array();
-
-    for (const AppState::Competition comp: state.comps) {
-
-        json b;
-        b["name"] = comp.name;
-      
-		b["compResults"] = json::array();
-
-        for (const AppState::CompEntry e : comp.compResults) {
-            b["compResults"].push_back({
-                {"name", e.name},
-                {"bow_type", e.bow_type},
-                {"score", e.score}
-                });
-        }
-
-        j["competitions"].push_back(b);
- 
-    }
-
-
-
-    std::ofstream file(path);
-    file << j.dump(3);
-}
-*/
-
 bool LoadArchersFromJson(const std::string& path, AppState& state)
 {
 	EnsureFileExists(path);
@@ -181,19 +65,18 @@ bool LoadArchersFromJson(const std::string& path, AppState& state)
             for (auto& a : j["archers"])
             {
                 Archer archer;
-                //archer.name = a["name"];
-                archer.name = a.value("name", "");
-
+                archer.name = a["name"];
+                //archer.name = a.value("name", "");
 
                 for (auto& s : a["scores"])
                 {
                     ScoreEntry score;
-                    //score.bow_type = s["bow_type"];
-                    score.bow_type = a.value("bow_type", "");
-                    //score.score = s["score"];
-                    score.score = a.value("score", 0);
-                    //score.handicap = s["handicap"];
-                    score.handicap = a.value("handicap", 0);
+                    score.bow_type = s["bow_type"];
+                    //score.bow_type = a.value("bow_type", "");
+                    score.score = s["score"];
+                    //score.score = a.value("score", 0);
+                    score.handicap = s["handicap"];
+                    //score.handicap = a.value("handicap", 0);
                     archer.scores.push_back(score);
                 }
 
@@ -238,19 +121,19 @@ bool LoadCompetitionsFromJson(const std::string& path, AppState& state)
             for (auto& b : j["competitions"])
             {
                 AppState::Competition comp;
-                comp.name = b.value("name", "");
-                //comp.name = b["name"];
+                //comp.name = b.value("name", "");
+                comp.name = b["comp_name"];
 
-                for (auto& e : b["compResults"])
+                for (auto& e : b["comp_results"])
                 {
                     AppState::CompEntry entry;
-                    //entry.name = e["name"];
-                    entry.name = e.value("name", "");
-                    //entry.bow_type = e["bow_type"];
-                    entry.bow_type = e.value("bow_type", "");
-                    //entry.score = e["score"];
-                    entry.score = e.value("score", 0);
-                    comp.compResults.push_back(entry);
+                    entry.name = e["name"];
+                    //entry.name = e.value("name", "");
+                    entry.bow_type = e["bow_type"];
+                    //entry.bow_type = e.value("bow_type", "");
+                    entry.score = e["score"];
+                    //entry.score = e.value("score", 0);
+                    comp.comp_results.push_back(entry);
                 }
 
                 state.comps.push_back(comp);
@@ -289,6 +172,7 @@ void SaveArchersToJson(const std::string& path, const AppState& state)
         json a;
         a["name"] = archer.name;
         a["overall_handicap"] = archer.overallHandicap;
+        a["scores"] = json::array();
 
         for (const auto& s : archer.scores)
         {
@@ -313,12 +197,12 @@ void SaveCompetitionsToJson(const std::string& path, const AppState& state)
     for (const AppState::Competition comp : state.comps) {
 
         json b;
-        b["name"] = comp.name;
+        b["comp_name"] = comp.name;
 
-        b["compResults"] = json::array();
+        b["comp_results"] = json::array();
 
-        for (const AppState::CompEntry e : comp.compResults) {
-            b["compResults"].push_back({
+        for (const AppState::CompEntry e : comp.comp_results) {
+            b["comp_results"].push_back({
                 {"name", e.name},
                 {"bow_type", e.bow_type},
                 {"score", e.score}
@@ -356,3 +240,4 @@ bool ArcherExists(const AppState& state, const std::string& name)
     }
     return false;
 }
+

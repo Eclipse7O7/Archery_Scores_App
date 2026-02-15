@@ -483,7 +483,7 @@ void DrawMainUI(AppState& state)
                     }
 
                     //if (entryArcherFound)
-					if (archerPtr != nullptr)
+					if (archerPtr != nullptr && state.validationCompError.empty())
                     {
 
                         // if valid then add scores to the respective names in the archers file
@@ -514,27 +514,45 @@ void DrawMainUI(AppState& state)
                         //archerFound.overallHandicap = RecalcHandicap(archerFound);
 						archerPtr->overallHandicap = RecalcHandicap(*archerPtr);
 
-                        SaveArchersToJson(
-                            ("archerData_" + state.currentSeason + ".json")
-                            , state
-                        );
-
+						if (state.validationError.empty())
+                        {
+                            SaveArchersToJson(
+                                ("archerData_" + state.currentSeason + ".json")
+                                , state
+                            );
+                        }
 
                     }
                     else
                     {
                         state.validationCompError = "Archer '" + entry.name + "' not found, either add archer or redo comp entry";
+                        allValid = false;
                     }
 
 
                 }
 
                 if (allValid) {
+                    
+                    /*
+                    LoadCompetitionsFromJson(
+                        ("competitionData_" + state.currentSeason + ".json")
+                        , state
+					);
+                    */
+                    
                     AppState::Competition newComp;
                     newComp.name = state.compName;
-                    newComp.compResults = state.competitionEntries;
+                    newComp.comp_results = state.competitionEntries;
                        
                     state.comps.push_back(newComp);
+
+                    ImGui::TextColored(ImVec4(1, 0, 0, 1), "%d", state.comps.size());
+
+                    if (state.comps.size() < 2)
+                    {
+                        state.validationCompError = "Comps size too small";
+                    }
 
                     SaveCompetitionsToJson(
                         ("competitionData_" + state.currentSeason + ".json")
@@ -547,9 +565,9 @@ void DrawMainUI(AppState& state)
             }
         }
         
-        if (!state.validationError.empty())
+        if (!state.validationCompError.empty())
         {
-            ImGui::TextColored(ImVec4(1, 0, 0, 1), "%s", state.validationError.c_str());
+            ImGui::TextColored(ImVec4(1, 0, 0, 1), "%s", state.validationCompError.c_str());
         }
 
         ImGui::EndChild();

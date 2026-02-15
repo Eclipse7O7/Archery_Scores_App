@@ -48,7 +48,7 @@ struct AppState
     struct Competition
     {
         std::string name;
-        std::vector<CompEntry> compResults = {};
+        std::vector<CompEntry> comp_results = {};
     };
 
     std::vector<Competition> comps = {};
