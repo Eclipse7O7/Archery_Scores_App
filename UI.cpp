@@ -264,7 +264,7 @@ void DrawMainUI(AppState& state)
 
 
 
-    // Internal Comp Stuff
+    // Comp Submitting
 
 
     if (ImGui::CollapsingHeader("Competition Submit"))
@@ -379,6 +379,7 @@ void DrawMainUI(AppState& state)
         {
 
             state.validationCompError.clear();
+            bool check = true;
 
             if (state.existingArcherName[0] == '\0')
             {
@@ -390,15 +391,34 @@ void DrawMainUI(AppState& state)
             }
             else
             {
-                AppState::CompEntry entry;
-                entry.name = state.existingArcherName;
-                entry.bow_type = bowTypes[item_selected_idx];
-                entry.score = state.existingArcherScore;
+                // Check if duplicate archer name, if so ensure has a differet bowstyle
+                // std::string verses char[x] strings!!!!!!
 
-                state.competitionEntries.push_back(entry);
+                std::string entryName = state.existingArcherName;
+                std::string entryBowType = bowTypes[item_selected_idx];
+                // have to directly use the bowTypes[item_selected_idx] as otherwise the comparison fails?
 
-                state.existingArcherName[0] = '\0';
-                state.existingArcherScore = 0;
+                
+                for (const auto& existingEntry : state.competitionEntries) {
+                    
+                    if ((existingEntry.name == state.existingArcherName) && (existingEntry.bow_type == state.existingArcherBowType)) {
+                        state.validationCompError = "The same archer cannot enter the\nsame competition multple times\nwith the same bow style";
+                        check = false;
+                        break;
+                    }
+                }
+
+                if (check) {
+                    AppState::CompEntry entry;
+                    entry.name = state.existingArcherName;
+                    entry.bow_type = bowTypes[item_selected_idx];
+                    entry.score = state.existingArcherScore;
+
+                    state.competitionEntries.push_back(entry);
+
+                    state.existingArcherName[0] = '\0';
+                    state.existingArcherScore = 0;
+                }
             }
 
         }
@@ -552,7 +572,7 @@ void DrawMainUI(AppState& state)
     }
 
 
-    // Internal Comp Stuff
+    // Comp Results
 
 
     if (ImGui::CollapsingHeader("Competition Results"))
