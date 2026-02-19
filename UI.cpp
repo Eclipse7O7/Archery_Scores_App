@@ -8,6 +8,16 @@
 // An alias for readability
 auto RecalcHandicap = CalculateOverallHandicap;
 
+static const char* bowTypes[] = {
+        "Barebow",
+        "Recurve",
+        "Compound",
+        "Longbow",
+        "Horsebow",
+        "Warbow",
+        "Other"
+};
+
 static std::string Normalise(const std::string& s);
 
 void DrawMainUI(AppState& state)
@@ -182,14 +192,41 @@ void DrawMainUI(AppState& state)
             ImGui::Separator();
             ImGui::Text("Add New Score");
 
-            ImGui::InputText("Bow Type", state.newBowType, IM_ARRAYSIZE(state.newBowType));
+            ImGuiWindowFlags dropdownFlags = ImGuiComboFlags_HeightSmall;//ImGuiComboFlags_HeightRegular
+            static int item_selected_idx = 0;
+            strncpy_s(state.newBowType, bowTypes[item_selected_idx], sizeof(state.newBowType) - 1);
+            state.newBowType[sizeof(state.newBowType) - 1] = '\0';
+
+            const char* combo_preview_value = bowTypes[item_selected_idx];
+            ImGui::SetNextItemWidth(150);
+            if (ImGui::BeginCombo("Bow Type", combo_preview_value, dropdownFlags))
+            {
+                for (int n = 0; n < IM_ARRAYSIZE(bowTypes); n++)
+                {
+                    const bool is_selected = (item_selected_idx == n);
+                    if (ImGui::Selectable(bowTypes[n], is_selected))
+                    {
+                        item_selected_idx = n;
+
+                        strncpy_s(state.newBowType, bowTypes[item_selected_idx], sizeof(state.newBowType) - 1);
+                        state.newBowType[sizeof(state.newBowType) - 1] = '\0';
+                    }
+                    // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+                    if (is_selected)
+                        ImGui::SetItemDefaultFocus();
+                }
+                ImGui::EndCombo();
+            }
+
+            //ImGui::InputText("Bow Type", state.newBowType, IM_ARRAYSIZE(state.newBowType));
             ImGui::InputInt("Score", &state.newScore);
 
             if (ImGui::Button("Add Score"))
             {
                 state.validationError.clear();
 
-                std::string bow = Normalise(state.newBowType);
+                // Moved to combobox for better UX, but leaving in case needed to switch back for debugging.
+                //std::string bow = Normalise(state.newBowType);
 
                 if (state.selectedArcher < 0)
                 {
@@ -199,7 +236,7 @@ void DrawMainUI(AppState& state)
                 {
                     state.validationError = "Bow type cannot be empty.";
                 }
-                else if (bow != std::string("recurve") &&
+                /*else if (bow != std::string("recurve") &&
                     bow != std::string("compound") &&
                     bow != std::string("barebow") &&
                     bow != std::string("longbow") &&
@@ -208,7 +245,7 @@ void DrawMainUI(AppState& state)
                     bow != std::string("other"))
                 {
                     state.validationError = "Bow type must be Barebow, Recurve, Compound,\n Longbow, Horsebow, Warbow, or Other.";
-                }
+                }*/
                 else if (state.newScore < 0 || state.newScore > 600)
                 {
                     state.validationError = "Score must be between 0 and 600.";
@@ -324,15 +361,7 @@ void DrawMainUI(AppState& state)
         ImGuiWindowFlags dropdownFlags = ImGuiComboFlags_HeightSmall;//ImGuiComboFlags_HeightRegular
         static int item_selected_idx = 0;
 
-        static const char* bowTypes[] = {
-        "Barebow",
-        "Recurve",
-        "Compound",
-        "Longbow",
-        "Horsebow",
-        "Warbow",
-        "Other"
-        };
+        
 
 
 
@@ -408,11 +437,35 @@ void DrawMainUI(AppState& state)
                     }
                 }
 
+
+				// Find the entry archer in archerData to get their handicap at the time of the comp, and add that to their score and save it here 
+                //  so it doesn't change if they submit a new score later that changes their overall handicap when reloading the comp in future
+                    
+                bool found = false;
+                int currentEntryHandicap = 0;
+
+                for (const auto& archer : state.archers) {
+                    if (archer.name == entryName) {
+						currentEntryHandicap = archer.overallHandicap;
+						found = true;
+                    }
+        
+				}
+
+                if (!found) {
+                    state.validationCompError = "Archer not found in archer data,\n please add the archer before\n submitting a comp entry for them";
+                    check = false;
+				}
+
                 if (check) {
                     AppState::CompEntry entry;
                     entry.name = state.existingArcherName;
                     entry.bow_type = bowTypes[item_selected_idx];
                     entry.score = state.existingArcherScore;
+
+                    
+                    entry.scoreWithAtTheTimeHandicap = (state.existingArcherScore + currentEntryHandicap);
+
 
                     state.competitionEntries.push_back(entry);
 
@@ -561,11 +614,12 @@ void DrawMainUI(AppState& state)
         }
 
 
-        
+        /*
         if (!state.validationCompError.empty())
         {
             ImGui::TextColored(ImVec4(1, 0, 0, 1), "%s", state.validationCompError.c_str());
         }
+        */
 
         ImGui::EndChild();
 

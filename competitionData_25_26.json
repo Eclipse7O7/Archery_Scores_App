@@ -6,12 +6,14 @@
             {
                "bow_type": "Recurve",
                "name": "Forename Surname9",
-               "score": 547
+               "score": 547,
+               "scoreWithAtTheTimeHandicap": 554
             },
             {
                "bow_type": "Recurve",
                "name": "Forename Surname1",
-               "score": 507
+               "score": 507,
+               "scoreWithAtTheTimeHandicap": 523
             }
          ]
       },
@@ -21,12 +23,14 @@
             {
                "bow_type": "Recurve",
                "name": "Forename Surname20",
-               "score": 512
+               "score": 512,
+               "scoreWithAtTheTimeHandicap": 523
             },
             {
                "bow_type": "Warbow",
                "name": "Forename Surname 4",
-               "score": 44
+               "score": 44,
+               "scoreWithAtTheTimeHandicap": 97
             }
          ]
       },
@@ -36,12 +40,14 @@
             {
                "bow_type": "Barebow",
                "name": "Forename Surname2",
-               "score": 433
+               "score": 433,
+               "scoreWithAtTheTimeHandicap": 460
             },
             {
                "bow_type": "Compound",
                "name": "Forename Surname3",
-               "score": 55
+               "score": 55,
+               "scoreWithAtTheTimeHandicap": 102
             }
          ]
       },
@@ -51,12 +57,14 @@
             {
                "bow_type": "Horsebow",
                "name": "Forename Surname3",
-               "score": 443
+               "score": 443,
+               "scoreWithAtTheTimeHandicap": 450
             },
             {
                "bow_type": "Horsebow",
                "name": "Forename Surname5",
-               "score": 255
+               "score": 255,
+               "scoreWithAtTheTimeHandicap": 432
             }
          ]
       },
@@ -66,7 +74,8 @@
             {
                "bow_type": "Barebow",
                "name": "Forename Surname3",
-               "score": 420
+               "score": 420,
+               "scoreWithAtTheTimeHandicap": 440
             }
          ]
       },
@@ -76,12 +85,14 @@
             {
                "bow_type": "Barebow",
                "name": "Forename Surname6",
-               "score": 555
+               "score": 555,
+               "scoreWithAtTheTimeHandicap": 565
             },
             {
                "bow_type": "Barebow",
                "name": "Forename Surname7",
-               "score": 506
+               "score": 506,
+               "scoreWithAtTheTimeHandicap": 511
             }
          ]
       }

@@ -133,7 +133,11 @@ bool LoadCompetitionsFromJson(const std::string& path, AppState& state)
                     //entry.bow_type = e.value("bow_type", "");
                     entry.score = e["score"];
                     //entry.score = e.value("score", 0);
-                    comp.comp_results.push_back(entry);
+                    //comp.comp_results.push_back(entry);
+
+					entry.scoreWithAtTheTimeHandicap = e["scoreWithAtTheTimeHandicap"];
+					comp.comp_results.push_back(entry);
+
                 }
 
                 state.comps.push_back(comp);
@@ -205,7 +209,8 @@ void SaveCompetitionsToJson(const std::string& path, const AppState& state)
             b["comp_results"].push_back({
                 {"name", e.name},
                 {"bow_type", e.bow_type},
-                {"score", e.score}
+                {"score", e.score},
+				{ "scoreWithAtTheTimeHandicap", e.scoreWithAtTheTimeHandicap }
                 });
         }
 

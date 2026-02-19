@@ -43,6 +43,7 @@ struct AppState
         std::string name;
         std::string bow_type;
         int score;
+        int scoreWithAtTheTimeHandicap;
     };
 
     struct Competition
@@ -60,7 +61,7 @@ struct AppState
     char existingArcherName[64] = "";
     int existingArcherScore = 0;
     char existingArcherBowType[8] = "";
-
+	
     std::string validationCompError;
 
 
