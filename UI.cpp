@@ -201,19 +201,48 @@ void DrawMainUI(AppState& state)
             ImGui::SetNextItemWidth(150);
             if (ImGui::BeginCombo("Bow Type", combo_preview_value, dropdownFlags))
             {
+                static ImGuiTextFilter filter;
+                if (ImGui::IsWindowAppearing())
+                {
+                    ImGui::SetKeyboardFocusHere();
+                    filter.Clear();
+                }
+
+                int firstMatchIndex = -1;
+
+                // Not even sure if this does anything - is from the example code
+                //ImGui::SetNextItemShortcut(ImGuiMod_Ctrl | ImGuiKey_F);
+                filter.Draw("##Filter", -FLT_MIN);
+
                 for (int n = 0; n < IM_ARRAYSIZE(bowTypes); n++)
                 {
-                    const bool is_selected = (item_selected_idx == n);
-                    if (ImGui::Selectable(bowTypes[n], is_selected))
-                    {
-                        item_selected_idx = n;
+					if (!filter.PassFilter(bowTypes[n]))
+                        continue;
 
+					if (firstMatchIndex == -1)
+                        firstMatchIndex = n;
+
+
+                    const bool is_selected = (item_selected_idx == n);
+                    if (filter.PassFilter(bowTypes[n])) {
+                        if (ImGui::Selectable(bowTypes[n], is_selected))
+                        {
+                            item_selected_idx = n;
+
+                            strncpy_s(state.newBowType, bowTypes[item_selected_idx], sizeof(state.newBowType) - 1);
+                            state.newBowType[sizeof(state.newBowType) - 1] = '\0';
+                        }
+                        // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+                        if (is_selected)
+                            ImGui::SetItemDefaultFocus();
+                    }
+
+                    if (firstMatchIndex != -1 && ImGui::IsKeyPressed(ImGuiKey_Enter)) {
+                        item_selected_idx = firstMatchIndex;
                         strncpy_s(state.newBowType, bowTypes[item_selected_idx], sizeof(state.newBowType) - 1);
                         state.newBowType[sizeof(state.newBowType) - 1] = '\0';
+                        ImGui::CloseCurrentPopup();
                     }
-                    // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
-                    if (is_selected)
-                        ImGui::SetItemDefaultFocus();
                 }
                 ImGui::EndCombo();
             }
@@ -369,19 +398,46 @@ void DrawMainUI(AppState& state)
         ImGui::SetNextItemWidth(150);
         if (ImGui::BeginCombo("Bow Type", combo_preview_value, dropdownFlags))
         {
+            static ImGuiTextFilter filter;
+            if (ImGui::IsWindowAppearing())
+            {
+                ImGui::SetKeyboardFocusHere();
+                filter.Clear();
+            }
+            int firstMatchIndex = -1;
+
+            // Not even sure if this does anything - is from the example code
+            //ImGui::SetNextItemShortcut(ImGuiMod_Ctrl | ImGuiKey_F);
+            filter.Draw("##Filter", -FLT_MIN);
+
             for (int n = 0; n < IM_ARRAYSIZE(bowTypes); n++)
             {
-                const bool is_selected = (item_selected_idx == n);
-                if (ImGui::Selectable(bowTypes[n], is_selected))
-                {
-                    item_selected_idx = n;
+                if (!filter.PassFilter(bowTypes[n]))
+                    continue;
 
-                    strncpy_s(state.existingArcherBowType, bowTypes[item_selected_idx], sizeof(state.existingArcherBowType) - 1);
-                    state.existingArcherBowType[sizeof(state.existingArcherBowType) - 1] = '\0';
+                if (firstMatchIndex == -1)
+                    firstMatchIndex = n;
+
+
+                const bool is_selected = (item_selected_idx == n);
+                if (filter.PassFilter(bowTypes[n])) {
+                    if (ImGui::Selectable(bowTypes[n], is_selected))
+                    {
+                        item_selected_idx = n;
+
+                        strncpy_s(state.existingArcherBowType, bowTypes[item_selected_idx], sizeof(state.existingArcherBowType) - 1);
+                        state.existingArcherBowType[sizeof(state.existingArcherBowType) - 1] = '\0';
+                    }
+                    // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+                    if (is_selected)
+                        ImGui::SetItemDefaultFocus();
                 }
-                // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
-                if (is_selected)
-                    ImGui::SetItemDefaultFocus();
+                if (firstMatchIndex != -1 && ImGui::IsKeyPressed(ImGuiKey_Enter)) {
+                    item_selected_idx = firstMatchIndex;
+                    strncpy_s(state.existingArcherBowType, bowTypes[item_selected_idx], sizeof(state.existingArcherBowType) - 1);
+                    state.newBowType[sizeof(state.existingArcherBowType) - 1] = '\0';
+                    ImGui::CloseCurrentPopup();
+                }
             }
             ImGui::EndCombo();
         }
@@ -633,6 +689,44 @@ void DrawMainUI(AppState& state)
     {
 
         ImGui::Text("Season: %s", state.currentSeason);
+
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		//ImGui::Combo("Season##CompResults", &seasonIndex, seasons, IM_ARRAYSIZE(seasons));
+
+		ImGui::BeginChild("CompResultsOptions", ImVec2(200, 0), ImGuiChildFlags_Borders);
+
+		ImGui::Checkbox("Handicapped Scores", &state.showHandicapAtTimeOfComp);
+
+        ImGuiWindowFlags flags = ImGuiChildFlags_None;
+
+		ImGui::BeginMultiSelect(flags, 1, 1);
+        ImGui::Checkbox("Recurve", &state.showRecurve);
+        ImGui::EndMultiSelect();
+
+        static const char* orderOption[] = {
+            "HighToLow",
+            "LowToHigh"
+        };
+
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        /*
+            if (ImGui::BeginCombo("Bow Type", combo_preview_value, dropdownFlags))
+            {
+                ImGui::Combo("Order By##CompResults", &seasonIndex, orderOption, IM_ARRAYSIZE(seasons));
+            }
+        */
+
+
+		ImGui::EndChild();
+
+        ImGui::SameLine();
+
+
+
+		ImGui::BeginChild("CompResults", ImVec2(0, 0), ImGuiChildFlags_Borders);
+
+
+        ImGui::EndChild();
     }
 
 

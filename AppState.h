@@ -69,4 +69,15 @@ struct AppState
     int compIndexToDelete = -1;
 
     char compName[128] = "";
+
+	// These are for the comp results view
+
+	bool showHandicapAtTimeOfComp = false;
+	bool showBarebow = false;
+    bool showRecurve = false;
+	bool showCompound = false;
+	bool showLongbow = false;
+	bool showHorsebow = false;
+	bool showWarbow = false;
+	bool showOther = false;
 };
