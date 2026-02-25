@@ -95,6 +95,17 @@
                "scoreWithAtTheTimeHandicap": 511
             }
          ]
+      },
+      {
+         "comp_name": "internalComp5",
+         "comp_results": [
+            {
+               "bow_type": "Recurve",
+               "name": "Forename Surname17",
+               "score": 344,
+               "scoreWithAtTheTimeHandicap": 344
+            }
+         ]
       }
    ]
 }

@@ -180,6 +180,17 @@
          "name": "Forename Surname20",
          "overall_handicap": 0,
          "scores": []
+      },
+      {
+         "name": "Adam Madejczyk",
+         "overall_handicap": 24,
+         "scores": [
+            {
+               "bow_type": "Recurve",
+               "handicap": 24,
+               "score": 588
+            }
+         ]
       }
    ]
 }

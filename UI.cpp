@@ -13,8 +13,6 @@ static const char* bowTypes[] = {
         "Recurve",
         "Compound",
         "Longbow",
-        "Horsebow",
-        "Warbow",
         "Other"
 };
 
@@ -56,15 +54,15 @@ void DrawMainUI(AppState& state)
                 state
             );
 
-            /*
+            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             state.comps.clear();
-            state.selectedComp = -1;
+            state.selectedComp = 0;
 
             LoadCompetitionsFromJson(
                 "competitionData_" + state.currentSeason + ".json",
                 state
             );
-            */
+            
         }
 
 
@@ -719,16 +717,17 @@ void DrawMainUI(AppState& state)
                 state
             );
 
-            /*
+            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
             // Uncomment and test this both here and right at the start once I have the comps visually loading for easier debugging
             state.comps.clear();
-            state.selectedComp = -1;
+            state.selectedComp = 0;
 
             LoadCompetitionsFromJson(
                 "competitionData_" + state.currentSeason + ".json",
                 state
 			);
-            */
+            
 
 
         }
@@ -736,7 +735,11 @@ void DrawMainUI(AppState& state)
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		//ImGui::Combo("Season##CompResults", &seasonIndex, seasons, IM_ARRAYSIZE(seasons));
 
-		ImGui::BeginChild("CompResultsOptions", ImVec2(200, 0), ImGuiChildFlags_Borders);
+        ImGuiInputFlags compFlags = ImGuiChildFlags_ResizeX || ImGuiChildFlags_Borders;
+
+
+
+		ImGui::BeginChild("CompResultsOptions", ImVec2(200, 0), compFlags);
 
 		ImGui::Checkbox("Handicapped Scores", &state.showHandicapAtTimeOfComp);
 
@@ -747,7 +750,11 @@ void DrawMainUI(AppState& state)
         ImGuiWindowFlags flags = ImGuiChildFlags_None;
 
 		ImGui::BeginMultiSelect(flags, 1, 1);
+		ImGui::Checkbox("Barebow", &state.showBarebow);
         ImGui::Checkbox("Recurve", &state.showRecurve);
+		ImGui::Checkbox("Compound", &state.showCompound);
+		ImGui::Checkbox("Longbow", &state.showLongbow);
+		ImGui::Checkbox("Other", &state.showOther);
         ImGui::EndMultiSelect();
 
         static const char* orderOption[] = {
@@ -764,14 +771,122 @@ void DrawMainUI(AppState& state)
         */
 
 
-		ImGui::EndChild();
+		//ImGui::EndChild();
 
-        ImGui::SameLine();
+        //ImGui::SameLine();
+        ImGui::Separator();
 
 
 
-		ImGui::BeginChild("CompResults", ImVec2(0, 0), ImGuiChildFlags_Borders);
+		//ImGui::BeginChild("Comps", ImVec2(169, 0), compFlags);
 
+
+
+        
+
+        ImGui::Text("Search Competitions");
+
+        /*
+        ImGui::InputText("##Search Competitions", state.compSearchBuffer, IM_ARRAYSIZE(state.compSearchBuffer));
+        ImGui::Separator();
+
+        for (int i = 0; i < state.comps.size(); i++)
+        {
+            const AppState::Competition& c = state.comps[i];
+
+            if (strlen(state.compSearchBuffer) > 0 &&
+                c.name.find(state.compSearchBuffer) == std::string::npos)
+                continue;
+
+            if (ImGui::Selectable(c.name.c_str(), state.selectedComp == i))
+                state.selectedComp = i;
+        }
+        */
+
+
+        static int item_selected_idx = 0;
+        ImGuiWindowFlags dropdownFlags = ImGuiComboFlags_HeightRegular;
+        const char* combo_preview_value = state.comps[item_selected_idx].name.c_str();
+
+        //ImGui::Text("Search Competitions");
+        ImGui::SetNextItemWidth(150);
+        if (ImGui::BeginCombo("##Search Competitions", combo_preview_value, dropdownFlags))
+        {
+            static ImGuiTextFilter filter;
+            if (ImGui::IsWindowAppearing())
+            {
+                ImGui::SetKeyboardFocusHere();
+                filter.Clear();
+            }
+
+            int firstMatchIndex = -1;
+
+            // Not even sure if this does anything - is from the example code
+            //ImGui::SetNextItemShortcut(ImGuiMod_Ctrl | ImGuiKey_F);
+            filter.Draw("##Filter", -FLT_MIN);
+
+           
+            for (int n = 0; n < state.comps.size(); n++)
+            {
+                if (!filter.PassFilter(state.comps[n].name.c_str()))
+                    continue;
+
+                if (firstMatchIndex == -1)
+                    firstMatchIndex = n;
+
+
+                const bool is_selected = (item_selected_idx == n);
+                if (filter.PassFilter(state.comps[n].name.c_str())) {
+                    if (ImGui::Selectable(state.comps[n].name.c_str(), is_selected))
+                    {
+                        item_selected_idx = n;
+						state.selectedComp = n;
+
+                    }
+                    // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+                    if (is_selected)
+                        ImGui::SetItemDefaultFocus();
+                }
+
+                if (firstMatchIndex != -1 && ImGui::IsKeyPressed(ImGuiKey_Enter)) {
+                    item_selected_idx = firstMatchIndex;
+                    state.selectedComp = firstMatchIndex;
+
+                    ImGui::CloseCurrentPopup();
+                }
+            }
+            ImGui::EndCombo();
+        }
+
+
+
+
+        ImGui::EndChild();
+
+		ImGui::SameLine();
+
+		ImGui::BeginChild("CompDetails", ImVec2(0, 0), compFlags);
+		ImGui::Text("Competition: %s", state.comps[state.selectedComp].name.c_str());
+
+		AppState::Competition& selectedCompetition = state.comps[state.selectedComp];
+
+		state.sortedCompetitionEntries = selectedCompetition.comp_results;
+
+        for (int i = 0; i < state.comps[state.selectedComp].comp_results.size(); i++) {
+            const auto& entry = state.comps[state.selectedComp].comp_results[i];
+            if (state.showHandicapAtTimeOfComp) {
+                ImGui::Text("%s - (%s)  Score: %d",
+                    entry.name.c_str(),
+                    entry.bow_type.c_str(),
+                    entry.scoreWithAtTheTimeHandicap);
+            }
+            else {
+                ImGui::Text("%s - (%s)  Score: %d",
+                    entry.name.c_str(),
+                    entry.bow_type.c_str(),
+                    entry.score);
+			}
+        }
 
         ImGui::EndChild();
     }

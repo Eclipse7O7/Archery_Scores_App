@@ -35,6 +35,7 @@ struct AppState
     char newArcherName[64] = "";
     bool showAddArcher = false;
 
+ 
 
     // Comp Submit states
 
@@ -53,7 +54,7 @@ struct AppState
     };
 
     std::vector<Competition> comps = {};
-    int selectedComp = -1;
+    int selectedComp = 0; // Has to be 0, not -1 to prevent silent crashes
 
    
     // This is for all the current entries in the submitting current comp
@@ -78,7 +79,8 @@ struct AppState
     bool showRecurve = false;
 	bool showCompound = false;
 	bool showLongbow = false;
-	bool showHorsebow = false;
-	bool showWarbow = false;
 	bool showOther = false;
+
+    char compSearchBuffer[128] = "";
+
 };

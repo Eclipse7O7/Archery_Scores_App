@@ -28,6 +28,16 @@
                "bow_type": "Recurve",
                "handicap": 51,
                "score": 515
+            },
+            {
+               "bow_type": "Recurve",
+               "handicap": 62,
+               "score": 455
+            },
+            {
+               "bow_type": "Compound",
+               "handicap": 62,
+               "score": 455
             }
          ]
       },
@@ -201,8 +211,14 @@
       },
       {
          "name": "Forename Surname17",
-         "overall_handicap": 0,
-         "scores": []
+         "overall_handicap": 76,
+         "scores": [
+            {
+               "bow_type": "Recurve",
+               "handicap": 76,
+               "score": 344
+            }
+         ]
       },
       {
          "name": "Forename Surname18",
