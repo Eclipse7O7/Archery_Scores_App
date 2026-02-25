@@ -18,6 +18,16 @@ static const char* bowTypes[] = {
         "Other"
 };
 
+static const char* seasons[] = {
+        "25_26",
+        "26_27",
+        "27_28"
+};
+
+static int seasonIndex = 0;
+
+
+
 static std::string Normalise(const std::string& s);
 
 void DrawMainUI(AppState& state)
@@ -28,13 +38,6 @@ void DrawMainUI(AppState& state)
 
     if (ImGui::CollapsingHeader("Scores", ImGuiTreeNodeFlags_DefaultOpen))
     {
-        static const char* seasons[] = {
-        "25_26",
-        "26_27",
-        "27_28"
-        };
-
-        static int seasonIndex = 0;
 
         state.currentSeason = seasons[seasonIndex];
 
@@ -52,6 +55,16 @@ void DrawMainUI(AppState& state)
                 "archerData_" + state.currentSeason + ".json",
                 state
             );
+
+            /*
+            state.comps.clear();
+            state.selectedComp = -1;
+
+            LoadCompetitionsFromJson(
+                "competitionData_" + state.currentSeason + ".json",
+                state
+            );
+            */
         }
 
 
@@ -690,12 +703,46 @@ void DrawMainUI(AppState& state)
 
         ImGui::Text("Season: %s", state.currentSeason);
 
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        state.currentSeason = seasons[seasonIndex];
+        if (ImGui::Combo("##seasonSelect2", &seasonIndex, seasons, IM_ARRAYSIZE(seasons)))
+        {
+            state.currentSeason = seasons[seasonIndex];
+
+            // Update the current range of archers and competitions, and load in the ones for the newly selected season
+
+            state.archers.clear();
+            state.selectedArcher = -1;
+
+            LoadArchersFromJson(
+                "archerData_" + state.currentSeason + ".json",
+                state
+            );
+
+            /*
+            // Uncomment and test this both here and right at the start once I have the comps visually loading for easier debugging
+            state.comps.clear();
+            state.selectedComp = -1;
+
+            LoadCompetitionsFromJson(
+                "competitionData_" + state.currentSeason + ".json",
+                state
+			);
+            */
+
+
+        }
+
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		//ImGui::Combo("Season##CompResults", &seasonIndex, seasons, IM_ARRAYSIZE(seasons));
 
 		ImGui::BeginChild("CompResultsOptions", ImVec2(200, 0), ImGuiChildFlags_Borders);
 
 		ImGui::Checkbox("Handicapped Scores", &state.showHandicapAtTimeOfComp);
+
+
+        ImGui::Separator();
+
 
         ImGuiWindowFlags flags = ImGuiChildFlags_None;
 

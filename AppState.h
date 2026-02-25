@@ -25,7 +25,7 @@ struct AppState
     char newBowType[64] = "";
     int newScore = 0;
 
-    std::string validationError;
+    std::string validationError = "";
 
     std::string currentSeason = "25_26";
 
@@ -40,19 +40,20 @@ struct AppState
 
     struct CompEntry
     {
-        std::string name;
-        std::string bow_type;
-        int score;
-        int scoreWithAtTheTimeHandicap;
+        std::string name = "";
+        std::string bow_type = "";
+        int score = 0;
+        int scoreWithAtTheTimeHandicap = 0;
     };
 
     struct Competition
     {
-        std::string name;
+        std::string name = "";
         std::vector<CompEntry> comp_results = {};
     };
 
     std::vector<Competition> comps = {};
+    int selectedComp = -1;
 
    
     // This is for all the current entries in the submitting current comp
