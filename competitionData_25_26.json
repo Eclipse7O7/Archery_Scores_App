@@ -106,6 +106,52 @@
                "scoreWithAtTheTimeHandicap": 344
             }
          ]
+      },
+      {
+         "comp_name": "comp67",
+         "comp_results": [
+            {
+               "bow_type": "Barebow",
+               "name": "Forename Surname16",
+               "score": 355,
+               "scoreWithAtTheTimeHandicap": 355
+            },
+            {
+               "bow_type": "Barebow",
+               "name": "Forename Surname17",
+               "score": 516,
+               "scoreWithAtTheTimeHandicap": 592
+            },
+            {
+               "bow_type": "Recurve",
+               "name": "Forename Surname14",
+               "score": 432,
+               "scoreWithAtTheTimeHandicap": 432
+            }
+         ]
+      },
+      {
+         "comp_name": "comp53",
+         "comp_results": [
+            {
+               "bow_type": "Barebow",
+               "name": "Forename Surname16",
+               "score": 34,
+               "scoreWithAtTheTimeHandicap": 109
+            },
+            {
+               "bow_type": "Barebow",
+               "name": "Forename Surname17",
+               "score": 455,
+               "scoreWithAtTheTimeHandicap": 518
+            },
+            {
+               "bow_type": "Barebow",
+               "name": "Forename Surname18",
+               "score": 356,
+               "scoreWithAtTheTimeHandicap": 356
+            }
+         ]
       }
    ]
 }

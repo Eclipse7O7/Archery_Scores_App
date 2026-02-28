@@ -83,4 +83,8 @@ struct AppState
 
     char compSearchBuffer[128] = "";
 
+    std::vector<CompEntry> sortedCompetitionEntries = {};
+
+	bool sortComps = false;
+
 };

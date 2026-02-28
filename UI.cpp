@@ -741,8 +741,9 @@ void DrawMainUI(AppState& state)
 
 		ImGui::BeginChild("CompResultsOptions", ImVec2(200, 0), compFlags);
 
-		ImGui::Checkbox("Handicapped Scores", &state.showHandicapAtTimeOfComp);
+		ImGui::Checkbox("Sort by Score", &state.sortComps);
 
+		ImGui::Checkbox("Handicapped Scores", &state.showHandicapAtTimeOfComp);
 
         ImGui::Separator();
 
@@ -870,22 +871,135 @@ void DrawMainUI(AppState& state)
 
 		AppState::Competition& selectedCompetition = state.comps[state.selectedComp];
 
-		state.sortedCompetitionEntries = selectedCompetition.comp_results;
 
-        for (int i = 0; i < state.comps[state.selectedComp].comp_results.size(); i++) {
-            const auto& entry = state.comps[state.selectedComp].comp_results[i];
-            if (state.showHandicapAtTimeOfComp) {
-                ImGui::Text("%s - (%s)  Score: %d",
-                    entry.name.c_str(),
-                    entry.bow_type.c_str(),
-                    entry.scoreWithAtTheTimeHandicap);
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // My brain is utterly fried - rewrite / fix this insertion sort later
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+        if (state.sortComps) {
+
+            // Using insertion sort as it is efficient for a small number of entries, and this 
+            //  app will generally only be handling n of around 20, and at worst around 200 which is still well in acceptable ranges
+            //  This implementation can be updated in the future if ever the need for large archer entry sets arises.
+
+
+            state.sortedCompetitionEntries = selectedCompetition.comp_results;
+
+            for (int i = 0; i < state.sortedCompetitionEntries.size(); i++) {
+                for (int j = i; j > 0; j--) {
+                    int scoreJ = state.showHandicapAtTimeOfComp
+                        ? state.sortedCompetitionEntries[j].scoreWithAtTheTimeHandicap
+                        : state.sortedCompetitionEntries[j].score;
+                    int scoreJMinus1 = state.showHandicapAtTimeOfComp
+                        ? state.sortedCompetitionEntries[j - 1].scoreWithAtTheTimeHandicap
+                        : state.sortedCompetitionEntries[j - 1].score;
+                    if (scoreJ > scoreJMinus1) {
+                        std::swap(state.sortedCompetitionEntries[j], state.sortedCompetitionEntries[j - 1]);
+                    }
+                    else {
+                        break;
+                    }
+                }
             }
-            else {
-                ImGui::Text("%s - (%s)  Score: %d",
-                    entry.name.c_str(),
-                    entry.bow_type.c_str(),
-                    entry.score);
-			}
+
+        }
+
+
+
+
+
+
+
+
+
+
+        /*
+        for (int i = 0; i < selectedCompetition.comp_results.size(); i++) {
+            if (i == 0) {
+                state.sortedCompetitionEntries.push_back(selectedCompetition.comp_results[i]);
+                continue;
+            }
+
+            int rightScore = state.showHandicapAtTimeOfComp
+                ? selectedCompetition.comp_results[i].scoreWithAtTheTimeHandicap
+                : selectedCompetition.comp_results[i].score;
+
+            for (int j = 0; j <= i; j++) {
+                int leftScore = state.showHandicapAtTimeOfComp
+                    ? selectedCompetition.comp_results[j].scoreWithAtTheTimeHandicap
+                    : selectedCompetition.comp_results[j].score;
+
+                if (leftScore < rightScore) {
+                    state.sortedCompetitionEntries.insert(state.sortedCompetitionEntries.begin() + j, selectedCompetition.comp_results[j]);
+                    break;
+                }
+                else {
+                    continue;
+                }
+
+                // [344]  ,  [566, 213, 312]
+
+
+                
+                //int scoreJ = state.showHandicapAtTimeOfComp
+                    //? selectedCompetition.comp_results[j].scoreWithAtTheTimeHandicap
+                    //: selectedCompetition.comp_results[j].score;
+                //int scoreJMinus1 = state.showHandicapAtTimeOfComp
+                    //? selectedCompetition.comp_results[j-1].scoreWithAtTheTimeHandicap
+                    //: selectedCompetition.comp_results[j-1].score;
+                //if (scoreJ > scoreJMinus1) {
+                    //std::swap(selectedCompetition.comp_results[j], selectedCompetition.comp_results[j-1]);
+                //}
+                //else {
+                    //break;
+                //}
+                
+            }
+        }
+        */
+
+
+
+
+
+
+
+        if (state.sortComps) {
+            for (const auto& entry : state.sortedCompetitionEntries) {
+                if (state.showHandicapAtTimeOfComp) {
+                    ImGui::Text("%s - (%s)  Score: %d",
+                        entry.name.c_str(),
+                        entry.bow_type.c_str(),
+                        entry.scoreWithAtTheTimeHandicap);
+                }
+                else {
+                    ImGui::Text("%s - (%s)  Score: %d",
+                        entry.name.c_str(),
+                        entry.bow_type.c_str(),
+                        entry.score);
+                }
+            }
+        }
+        else {
+            for (int i = 0; i < state.comps[state.selectedComp].comp_results.size(); i++) {
+                const auto& entry = state.comps[state.selectedComp].comp_results[i];
+
+                // next is to put an if barebow, recurve, etc filter here to only show the relevant entries based on the checkboxes
+
+                if (state.showHandicapAtTimeOfComp) {
+                    ImGui::Text("%s - (%s)  Score: %d",
+                        entry.name.c_str(),
+                        entry.bow_type.c_str(),
+                        entry.scoreWithAtTheTimeHandicap);
+                }
+                else {
+                    ImGui::Text("%s - (%s)  Score: %d",
+                        entry.name.c_str(),
+                        entry.bow_type.c_str(),
+                        entry.score);
+                }
+            }
         }
 
         ImGui::EndChild();

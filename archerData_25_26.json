@@ -196,8 +196,14 @@
       },
       {
          "name": "Forename Surname14",
-         "overall_handicap": 0,
-         "scores": []
+         "overall_handicap": 66,
+         "scores": [
+            {
+               "bow_type": "Recurve",
+               "handicap": 66,
+               "score": 432
+            }
+         ]
       },
       {
          "name": "Forename Surname15",
@@ -206,24 +212,51 @@
       },
       {
          "name": "Forename Surname16",
-         "overall_handicap": 0,
-         "scores": []
+         "overall_handicap": 98,
+         "scores": [
+            {
+               "bow_type": "Barebow",
+               "handicap": 75,
+               "score": 355
+            },
+            {
+               "bow_type": "Barebow",
+               "handicap": 121,
+               "score": 34
+            }
+         ]
       },
       {
          "name": "Forename Surname17",
-         "overall_handicap": 76,
+         "overall_handicap": 63,
          "scores": [
             {
                "bow_type": "Recurve",
                "handicap": 76,
                "score": 344
+            },
+            {
+               "bow_type": "Barebow",
+               "handicap": 51,
+               "score": 516
+            },
+            {
+               "bow_type": "Barebow",
+               "handicap": 62,
+               "score": 455
             }
          ]
       },
       {
          "name": "Forename Surname18",
-         "overall_handicap": 0,
-         "scores": []
+         "overall_handicap": 75,
+         "scores": [
+            {
+               "bow_type": "Barebow",
+               "handicap": 75,
+               "score": 356
+            }
+         ]
       },
       {
          "name": "Forename Surname19",
